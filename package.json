@@ -60,6 +60,12 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   },
+  "lint-staged": {
+    "**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"
