@@ -1,5 +1,4 @@
-'use client'
-import { useEffect, useState } from 'react';
+'use client';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import FadeIn from '@/components/transition/FadeIn';

@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import { useAppState } from '@/hooks/app-state/useAppState';
 import { Splash } from '@/components/Splash';
 
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],

@@ -1,6 +1,3 @@
-'use client'
-import { useState } from 'react';
-
 export function Splash() {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-white transition-opacity duration-500">
