@@ -1,23 +1,21 @@
-import { Suspense } from 'react';
+'use client';
 import { Splash } from '@/components/Splash';
 import OnBoarding from '@/app/client/OnBoarding';
+import { useEffect, useState } from 'react';
 
-async function fetchData() {
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  return { message: 'success' };
-}
+export default function Home() {
+  const [showOnBoarding, setShowOnBoarding] = useState(false);
 
-async function MyHome() {
-  console.time('teo OnBoarding');
-  await fetchData();
-  console.timeEnd('teo OnBoarding');
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOnBoarding(true);
+    }, 3000);
+    return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 정리
+  }, []);
+
+  if (!showOnBoarding) {
+    return <Splash />; // 딜레이 동안 Splash 화면 표시
+  }
+
   return <OnBoarding />;
-}
-
-export default async function Home() {
-  return (
-    <Suspense fallback={<Splash />}>
-      <MyHome />
-    </Suspense>
-  );
 }
