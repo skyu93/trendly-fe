@@ -73,14 +73,13 @@ body {
     width: 100%;
     max-width: 420px;
     min-height: 100vh;
-    background-color: blanchedalmond;
+    border: 1px solid lightgray;
     margin: 0 auto;
   }
 }
 /* 1024px 이상에서 스타일 적용 */
 @media screen and (min-width: 1024px) {
   main{
-    margin: 0 0 0 50vw;
-    background-color: red;
+    border: 2px solid lightcoral;
   }
 }
