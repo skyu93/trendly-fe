@@ -3,13 +3,15 @@ import { Splash } from '@/components/Splash';
 import OnBoarding from '@/app/client/OnBoarding';
 
 async function fetchData() {
-  await new Promise((resolve) => setTimeout(resolve, 1500));
+  await new Promise(resolve => setTimeout(resolve, 1500));
   return { message: 'success' };
 }
 
 async function MyHome() {
+  console.time('teo OnBoarding');
   await fetchData();
-  return <OnBoarding />
+  console.timeEnd('teo OnBoarding');
+  return <OnBoarding />;
 }
 
 export default async function Home() {
