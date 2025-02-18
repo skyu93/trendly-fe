@@ -1,6 +1,5 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { includes } from 'es-toolkit/compat';
 
 // 인증이 필요한 경로
 const PROTECTED_ROUTES: string[] = ['/list'];
@@ -42,7 +41,7 @@ const isValidateToken = (token?: string): boolean => {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (includes(PROTECTED_ROUTES, pathname)) {
+  if (PROTECTED_ROUTES.includes(pathname)) {
     // 2. 토큰 체크 - 쿠키와 로컬 스토리지 모두 확인
     const tokenFromCookie = req.cookies.get('auth_token')?.value;
     if (!isValidateToken(tokenFromCookie)) {
