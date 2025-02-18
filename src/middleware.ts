@@ -51,7 +51,6 @@ export async function middleware(req: NextRequest) {
   const tokenFromCookie = req.cookies.get('auth_token')?.value;
   if (!isValidateToken(tokenFromCookie)) {
     const loginUrl = new URL('/on-boarding', req.url);
-    loginUrl.searchParams.set('redirect_to', pathname);
     return NextResponse.redirect(loginUrl);
   }
 
