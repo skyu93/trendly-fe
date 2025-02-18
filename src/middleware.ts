@@ -1,8 +1,9 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { includes } from 'es-toolkit/compat';
 
-// 인증이 필요없는 public 라우트들
-const publicRoutes = ['/login', '/on-boarding'];
+// 인증이 필요한 경로
+const PROTECTED_ROUTES: string[] = ['/list'];
 
 // 토큰 체크 함수
 const isValidateToken = (token?: string): boolean => {
@@ -41,22 +42,18 @@ const isValidateToken = (token?: string): boolean => {
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  console.log('middleware url: ', pathname);
-  // 1. public 라우트 체크
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next();
-  }
-
-  // 2. 토큰 체크 - 쿠키와 로컬 스토리지 모두 확인
-  const tokenFromCookie = req.cookies.get('auth_token')?.value;
-  if (!isValidateToken(tokenFromCookie)) {
-    const loginUrl = new URL('/on-boarding', req.url);
-    return NextResponse.redirect(loginUrl);
+  if (includes(PROTECTED_ROUTES, pathname)) {
+    // 2. 토큰 체크 - 쿠키와 로컬 스토리지 모두 확인
+    const tokenFromCookie = req.cookies.get('auth_token')?.value;
+    if (!isValidateToken(tokenFromCookie)) {
+      const loginUrl = new URL('/about', req.url);
+      return NextResponse.redirect(loginUrl);
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|404|not-found).*)'],
 };
