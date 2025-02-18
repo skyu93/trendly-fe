@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 // 인증이 필요한 경로
-const PROTECTED_ROUTES: string[] = ['/list'];
+const PROTECTED_ROUTES: string[] = ['/', '/list'];
 
 // 토큰 체크 함수
 const isValidateToken = (token?: string): boolean => {
