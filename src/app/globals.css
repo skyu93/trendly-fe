@@ -68,18 +68,16 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    background-color: rgba(234, 255, 76, 0.18);
   }
   main{
     width: 100%;
     max-width: 420px;
     min-height: 100vh;
-    border: 1px solid lightgray;
+    background-color: hsl(var(--background));
     margin: 0 auto;
   }
 }
 /* 1024px 이상에서 스타일 적용 */
 @media screen and (min-width: 1024px) {
-  main{
-    border: 2px solid lightcoral;
-  }
 }
