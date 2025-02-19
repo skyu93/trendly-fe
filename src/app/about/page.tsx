@@ -5,6 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import FadeIn from '@/components/transition/FadeIn';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ROUTE_PATH } from '@/constants/route';
 
 const steps = ['기본 정보', '세부 정보', '완료'];
 
@@ -25,18 +26,18 @@ export default function Page() {
       goToLogin();
       return;
     }
-    router.push(`/about?step=${step + 1}`);
+    router.push(`${ROUTE_PATH.ABOUT}?step=${step + 1}`);
   };
 
   // const prevStep = () => {
   //   if (step <= 1) {
   //     return;
   //   }
-  //   router.push(`/about?step=${step - 1}`);
+  //   router.push(`${ROUTE_PATH.ABOUT}?step=${step - 1}`);
   // };
 
   const goToLogin = () => {
-    router.push(`/login`);
+    router.push(ROUTE_PATH.LOGIN);
   };
   const getPercent = () => (step / steps.length) * 100;
 

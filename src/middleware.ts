@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { ROUTE_PATH } from '@/constants/route';
 
 // 인증이 필요한 경로
 const PROTECTED_ROUTES: string[] = ['/', '/list'];
@@ -45,7 +46,7 @@ export async function middleware(req: NextRequest) {
     // 2. 토큰 체크 - 쿠키와 로컬 스토리지 모두 확인
     const tokenFromCookie = req.cookies.get('auth_token')?.value;
     if (!isValidateToken(tokenFromCookie)) {
-      const loginUrl = new URL('/about', req.url);
+      const loginUrl = new URL(ROUTE_PATH.ABOUT, req.url);
       return NextResponse.redirect(loginUrl);
     }
   }
