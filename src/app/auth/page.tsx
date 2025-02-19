@@ -1,14 +1,22 @@
 'use client';
-
 import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { ROUTE_PATH } from '@/constants/route';
 
 export default function KakaoCallback() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <KakaoCallbackContent />
+    </Suspense>
+  );
+}
+
+function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { getToken } = useAuth();
+
   useEffect(() => {
     const handleKakaoCallback = async () => {
       const code = searchParams.get('code');
@@ -20,7 +28,6 @@ export default function KakaoCallback() {
 
       try {
         const kakaoAuth = await getToken(code);
-        // TODO: 사용자 정보를 서버에 저장하거나 상태 관리
         console.log('Token :', kakaoAuth);
       } catch (error) {
         console.error('Kakao login error:', error);
@@ -29,11 +36,7 @@ export default function KakaoCallback() {
     };
 
     handleKakaoCallback();
-  }, [router, searchParams]);
+  }, [router, searchParams, getToken]);
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div>로그인 처리 중...</div>
-    </Suspense>
-  );
+  return <div>로그인 처리 중...</div>;
 }
