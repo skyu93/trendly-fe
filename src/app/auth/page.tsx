@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { ROUTE_PATH } from '@/constants/route';
@@ -31,5 +31,9 @@ export default function KakaoCallback() {
     handleKakaoCallback();
   }, [router, searchParams]);
 
-  return <div>로그인 처리 중...</div>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>로그인 처리 중...</div>
+    </Suspense>
+  );
 }
