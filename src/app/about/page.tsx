@@ -48,7 +48,7 @@ function PageContent() {
     <div className="w-full h-screen relative flex flex-col items-center justify-center">
       <FadeIn>
         <div className="m-4">
-          <div className="absolute top-5 right-5 text-sm cursor-pointer hover:font-bold" onClick={goToLogin}>
+          <div className="absolute top-5 right-5 text-sm hover:cursor-pointer hover:font-bold" onClick={goToLogin}>
             SKIP
           </div>
           <div className="flex flex-col items-center text-center gap-6">

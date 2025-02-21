@@ -3,6 +3,7 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
+import SplashScreen from '@/app/SplashScreen';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -48,7 +49,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <main>{children}</main>
+        <main>
+          <SplashScreen />
+          {children}
+        </main>
       </body>
     </html>
   );
