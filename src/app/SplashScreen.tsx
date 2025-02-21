@@ -12,7 +12,7 @@ export default function SplashScreen() {
     }, 3000);
 
     return () => clearTimeout(timer); // 타이머 정리
-  }, [isSplashVisible]);
+  }, [isSplashVisible, hideSplash]);
 
   return isSplashVisible && <Splash />;
 }
