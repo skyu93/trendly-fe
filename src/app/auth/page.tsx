@@ -1,42 +1,43 @@
 'use client';
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { ROUTE_PATH } from '@/constants/route';
+import { isNil } from 'es-toolkit/compat';
+import { useSplash } from '@/hooks/useSplash';
 
 export default function KakaoCallback() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <KakaoCallbackContent />
-    </Suspense>
-  );
-}
-
-function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { getToken } = useAuth();
+  const { showSplash, isSplashVisible } = useSplash();
+
+  useEffect(() => {
+    if (!isSplashVisible) {
+      router.push(ROUTE_PATH.LOGIN);
+    }
+  }, [isSplashVisible]);
 
   useEffect(() => {
     const handleKakaoCallback = async () => {
       const code = searchParams.get('code');
-
       if (!code) {
         router.push(ROUTE_PATH.LOGIN);
         return;
       }
 
-      try {
-        const kakaoAuth = await getToken(code);
-        console.log('Token :', kakaoAuth);
-      } catch (error) {
-        console.error('Kakao login error:', error);
+      const authToken = await getToken(code);
+      if (isNil(authToken)) {
         router.push(ROUTE_PATH.LOGIN);
+        return;
       }
+      // 로그인 성공시
+      console.log('Token :', authToken);
+      showSplash();
     };
 
     handleKakaoCallback();
   }, [router, searchParams, getToken]);
 
-  return <div>로그인 처리 중...</div>;
+  return <div>로그인중...</div>;
 }
