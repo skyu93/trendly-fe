@@ -2,7 +2,7 @@ import { create } from 'zustand/react';
 import { AuthState } from '@/types/auth.type';
 
 const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize';
-const REDIRECT_URI = 'http://localhost:3000/auth';
+const REDIRECT_URI = `${window.location.origin}/auth`;
 const CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID ?? '';
 
 export const useAuth = create<AuthState>(set => ({
