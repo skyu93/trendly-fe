@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button/Button';
 import { Progress } from '@/components/ui/progress';
 import FadeIn from '@/components/transition/FadeIn';
 import { useRouter, useSearchParams } from 'next/navigation';

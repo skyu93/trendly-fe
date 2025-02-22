@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/auth/useAuth';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button/Button';
 
 interface Props {
   className?: string;

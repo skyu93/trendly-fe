@@ -22,29 +22,29 @@ export default {
           foreground: 'var(--popover-foreground)',
         },
         primary: {
+          '10': '#FCFFE5',
+          '20': '#F6FFB2',
+          '30': '#F0FF7F',
+          '40': '#EAFF4C',
+          '50': '#E4FF19',
+          '60': '#E2FF00',
+          '70': '#CBE500',
+          '80': '#9EB200',
+          '90': '#879900',
           DEFAULT: 'var(--primary)',
           foreground: 'var(--primary-foreground)',
-          10: '#FCFFE5',
-          20: '#F6FFB2',
-          30: '#F0FF7F',
-          40: '#EAFF4C',
-          50: '#E4FF19',
-          60: '#E2FF00', // Primary Theme Color
-          70: '#CBE500',
-          80: '#9EB200',
-          90: '#879900',
         },
         greyscale: {
-          DEFAULT: '#1A1A1A', // 기본 색상 (Greyscale 90)
-          10: '#F0F0F0',
-          20: '#D0D0D0',
-          30: '#C2C2C2',
-          40: '#8C8C8C',
-          50: '#727272',
-          60: '#5A5A5A',
-          70: '#434343',
-          80: '#2E2E2E',
-          90: '#1A1A1A',
+          '10': '#F0F0F0',
+          '20': '#D0D0D0',
+          '30': '#C2C2C2',
+          '40': '#8C8C8C',
+          '50': '#727272',
+          '60': '#5A5A5A',
+          '70': '#434343',
+          '80': '#2E2E2E',
+          '90': '#1A1A1A',
+          DEFAULT: '#1A1A1A',
         },
         secondary: {
           DEFAULT: 'var(--secondary)',
@@ -77,6 +77,28 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
+          },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },
