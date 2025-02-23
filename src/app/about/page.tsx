@@ -47,7 +47,7 @@ function PageContent() {
   };
 
   const getPercent = () => (step / steps.length) * 100;
-  const currentStepImg = useMemo(() => steps[step - 1], [step, steps]);
+  const currentStepImg = useMemo(() => steps[step - 1], [step]);
 
   return (
     <div className="w-full h-screen relative flex flex-col items-center justify-center">
