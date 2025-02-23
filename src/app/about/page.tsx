@@ -4,10 +4,14 @@ import { Button } from '@/components/ui/button/Button';
 import { Progress } from '@/components/ui/progress';
 import FadeIn from '@/components/transition/FadeIn';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { ROUTE_PATH } from '@/constants/route';
+import Image from 'next/image';
+import Step1 from '@/assets/on-boarding/step-1.png';
+import Step2 from '@/assets/on-boarding/step-2.png';
+import Step3 from '@/assets/on-boarding/step-3.png';
 
-const steps = ['기본 정보', '세부 정보', '완료'];
+const steps = [Step1, Step2, Step3];
 
 export default function Page() {
   return (
@@ -43,6 +47,7 @@ function PageContent() {
   };
 
   const getPercent = () => (step / steps.length) * 100;
+  const currentStepImg = useMemo(() => steps[step - 1], [step, steps]);
 
   return (
     <div className="w-full h-screen relative flex flex-col items-center justify-center">
@@ -52,9 +57,9 @@ function PageContent() {
             SKIP
           </div>
           <div className="flex flex-col items-center text-center gap-6">
-            <div className="text-2xl font-bold mt-3">당신의 생각이 트렌드가 되는 순간</div>
-            <Progress value={getPercent()} />
-            <Button className="w-full" onClick={nextStep}>
+            <Image src={currentStepImg} alt="온보딩 이미지" />
+            <Progress className="h-[2px]" value={getPercent()} />
+            <Button className="w-full text-greyscale-90" onClick={nextStep}>
               {isFinished() ? '시작하기' : '계속'}
             </Button>
           </div>
