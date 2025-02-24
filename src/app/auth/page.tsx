@@ -5,10 +5,11 @@ import { useAuth } from '@/hooks/auth/useAuth';
 import { ROUTE_PATH } from '@/constants/route';
 import { isNil } from 'es-toolkit/compat';
 import { useSplash } from '@/hooks/useSplash';
+import { Splash } from '@/components/Splash';
 
 export default function KakaoCallback() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Splash />}>
       <KakaoCallbackContent />
     </Suspense>
   );
