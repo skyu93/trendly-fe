@@ -72,7 +72,7 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    background-color: #FCFFE5;
+    background-color: #000000;
   }
   main{
     position: relative;
@@ -86,4 +86,7 @@ body {
 }
 /* 1024px 이상에서 스타일 적용 */
 @media screen and (min-width: 1024px) {
+  main {
+    margin: 0 0 0 calc(50vw + 45px);
+  }
 }
