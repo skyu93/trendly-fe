@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button/Button';
 import { Progress } from '@/components/ui/progress';
-import FadeIn from '@/components/transition/FadeIn';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { ROUTE_PATH } from '@/constants/route';
@@ -51,25 +50,21 @@ function PageContent() {
   const currentStepImg = useMemo(() => steps[step - 1], [step]);
 
   return (
-    <div className="w-full h-screen relative flex flex-col items-center justify-center">
-      <FadeIn>
-        <div className="m-4">
-          <div className="absolute top-5 right-5 text-sm hover:cursor-pointer hover:font-bold" onClick={goToLogin}>
-            SKIP
-          </div>
-          <div className="flex flex-col items-center text-center gap-6">
-            <Image
-              src={currentStepImg}
-              priority={step === 1} // 첫 번째 이미지는 priority로 우선 로드
-              alt="온보딩 이미지"
-            />
-            <Progress className="h-[2px]" value={getPercent()} />
-            <Button className="w-full text-greyscale-90" onClick={nextStep}>
-              {isFinished() ? '시작하기' : '계속'}
-            </Button>
-          </div>
-        </div>
-      </FadeIn>
+    <div className="h-screen flex flex-col items-center justify-center p-4">
+      <div className="absolute top-5 right-5 text-sm hover:cursor-pointer hover:font-bold" onClick={goToLogin}>
+        SKIP
+      </div>
+      <div className="flex flex-col items-center text-center gap-6">
+        <Image
+          src={currentStepImg}
+          priority={step === 1} // 첫 번째 이미지는 priority로 우선 로드
+          alt="온보딩 이미지"
+        />
+        <Progress className="h-[2px]" value={getPercent()} />
+        <Button className="w-full text-greyscale-90" onClick={nextStep}>
+          {isFinished() ? '시작하기' : '계속'}
+        </Button>
+      </div>
     </div>
   );
 }
