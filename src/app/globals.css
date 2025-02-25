@@ -73,6 +73,7 @@ body {
   body {
     @apply bg-background text-foreground;
     background-color: #000000;
+    overflow: hidden;
   }
   main{
     position: relative;
