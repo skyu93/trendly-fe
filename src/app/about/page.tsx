@@ -58,7 +58,11 @@ function PageContent() {
             SKIP
           </div>
           <div className="flex flex-col items-center text-center gap-6">
-            <Image src={currentStepImg} alt="온보딩 이미지" />
+            <Image
+              src={currentStepImg}
+              priority={step === 1} // 첫 번째 이미지는 priority로 우선 로드
+              alt="온보딩 이미지"
+            />
             <Progress className="h-[2px]" value={getPercent()} />
             <Button className="w-full text-greyscale-90" onClick={nextStep}>
               {isFinished() ? '시작하기' : '계속'}
