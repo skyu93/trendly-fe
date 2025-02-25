@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import SplashScreen from '@/app/SplashScreen';
 import logoHorizontal from '@/assets/logo-horizontal.png';
 import Image from 'next/image';
+import localFont from 'next/font/local';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -15,6 +16,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+const suite = localFont({
+  src: '../../public/fonts/SUITE-Variable.woff2',
+  variable: '--font-suite',
+  display: 'swap', // 폰트 로딩 중 텍스트 표시 방식
+  preload: true, // 폰트 미리 로드 여부
 });
 
 export const metadata: Metadata = {
@@ -49,8 +57,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="ko">
+      <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="fixed left-0 z-0 h-full w-[calc(50vw+45px)] items-center overflow-hidden hidden lg:flex lg:p-16 xl:p-40">
           <div className="max-w-md">
             <Image src={logoHorizontal} alt="로고 이미지" className="mb-8 md:mb-10" />
