@@ -10,12 +10,13 @@ import Image from 'next/image';
 import Step1 from '@/assets/on-boarding/step-1.png';
 import Step2 from '@/assets/on-boarding/step-2.png';
 import Step3 from '@/assets/on-boarding/step-3.png';
+import { Splash } from '@/components/Splash';
 
 const steps = [Step1, Step2, Step3];
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Splash />}>
       <PageContent />
     </Suspense>
   );
