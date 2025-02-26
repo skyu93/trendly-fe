@@ -33,7 +33,7 @@ export default function Main() {
       </TabsList>
       {map(TAB_LIST, ({ value }) => {
         return (
-          <TabsContent key={value} value={value} className="w-full h-full">
+          <TabsContent key={value} value={value} className="w-full h-[calc(100%-36px)]">
             <KeywordRankList title="실시간" list={ranks} />
           </TabsContent>
         );

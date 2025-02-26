@@ -77,9 +77,11 @@ body {
   }
   main{
     position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 420px;
-    min-height: 100vh;
+    height: 100vh;
     background-color: var(--background);
     margin: 0 auto;
     color: #FFFFFF;
