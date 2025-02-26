@@ -20,7 +20,7 @@ export default function notFound() {
       </div>
       <Link
         className="w-full h-12 mt-40 bg-greyscale-80 text-white font-bold p-3 rounded-md text-center"
-        href={ROUTE_PATH.MAIN}
+        href={ROUTE_PATH.KEYWORDS}
       >
         메인으로 돌아가기
       </Link>
