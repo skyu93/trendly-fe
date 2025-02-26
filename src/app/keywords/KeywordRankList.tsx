@@ -12,7 +12,7 @@ interface Props {
 }
 export default function KeywordRankList({ title, list }: Props) {
   return (
-    <div className="flex flex-col px-4 w-full h-full text-greyscale-10">
+    <div className="flex flex-col w-full h-full text-greyscale-10">
       <div className="flex items-center justify-between py-8">
         <div className="flex items-center gap-1">
           <SvgIcon id="trend" color="primary" />

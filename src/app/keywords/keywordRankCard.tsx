@@ -7,7 +7,7 @@ interface Props {
 }
 export default function KeywordRankCard({ rank, keyword }: Props) {
   return (
-    <div className="group flex items-center justify-between h-[67px] py-[18px] px-3 rounded-lg hover:cursor-pointer hover:bg-greyscale-20">
+    <div className="group flex items-center justify-between h-[67px] py-[18px] rounded-lg hover:cursor-pointer hover:bg-greyscale-20">
       <div className="flex items-center">
         <div className="w-6 h-6 rounded-full bg-greyscale-80 text-greyscale-10 flex items-center justify-center group-hover:bg-greyscale-10 group-hover:text-greyscale-90">
           {rank}

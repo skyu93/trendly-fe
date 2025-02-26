@@ -15,7 +15,7 @@ export const usePageMeta = () => {
       return null;
     }
     return { ...pageMeta, pathname };
-  }, [pathname, ROUTE_PAGE_META]);
+  }, [pathname]);
 
   const getSearchParams = (name: string) => {
     if (isNil(name)) {
