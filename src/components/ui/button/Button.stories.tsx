@@ -2,20 +2,16 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@/components/ui/button/Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'ui/Button',
   component: Button,
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
+      options: ['default', 'secondary', 'outline', 'tertiary'],
     },
     size: {
       control: 'select',
       options: ['default', 'sm', 'lg', 'icon'],
-    },
-    children: {
-      control: 'text',
-      defaultValue: 'Button',
     },
   },
 };
@@ -31,11 +27,3 @@ export const Default: Story = {
     children: 'Button',
   },
 };
-
-// export const Variants: Story = {
-//   args: {}
-// };
-//
-// export const Sizes: Story = {
-//   args: {}
-// };

@@ -36,34 +36,10 @@ body {
     --chart-5: #F4A261;
 
     --radius: 0.5rem;
-  }
 
-  /*.dark {*/
-  /*  --background: #0a0a0a;*/
-  /*  --foreground: #fafafa;*/
-  /*  --card: #0a0a0a;*/
-  /*  --card-foreground: #fafafa;*/
-  /*  --popover: #0a0a0a;*/
-  /*  --popover-foreground: #fafafa;*/
-  /*  --primary: #a3ff00;*/
-  /*  --primary-foreground: #1A1A1A;*/
-  /*  --secondary: #262626;*/
-  /*  --secondary-foreground: #fafafa;*/
-  /*  --muted: #262626;*/
-  /*  --muted-foreground: #a2a2a2;*/
-  /*  --accent: #262626;*/
-  /*  --accent-foreground: #fafafa;*/
-  /*  --destructive: #991f1f;*/
-  /*  --destructive-foreground: #fafafa;*/
-  /*  --border: #262626;*/
-  /*  --input: #262626;*/
-  /*  --ring: #d4d4d4;*/
-  /*  --chart-1: #3366ff;*/
-  /*  --chart-2: #33cc99;*/
-  /*  --chart-3: #ffaa33;*/
-  /*  --chart-4: #9966cc;*/
-  /*  --chart-5: #ff3366;*/
-  /*}*/
+    --bg-01: #131517;
+    --bg-02: #212121;
+  }
 }
 
 @layer base {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Switch } from '@/components/ui/switch';
+import { Switch } from '@/components/ui/switch/Switch';
 
 export function MarketingConsentSwitch({ defaultChecked }: { defaultChecked: boolean }) {
   const [checked, setChecked] = useState(defaultChecked);

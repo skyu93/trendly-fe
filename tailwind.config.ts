@@ -49,6 +49,10 @@ export default {
           '90': '#1A1A1A',
           DEFAULT: '#1A1A1A',
         },
+        dark: {
+          '01': 'var(--bg-01)',
+          '02': 'var(--bg-02)',
+        },
         secondary: {
           DEFAULT: 'var(--secondary)',
           foreground: 'var(--secondary-foreground)',
