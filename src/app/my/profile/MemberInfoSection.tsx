@@ -46,7 +46,7 @@ export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-greyscale-10 font-bold text-sm">회원 정보</h2>
         <Button
-          className="text-xs p-0 h-auto text-greyscale-20 bg-transparent hover:bg-transparent hover:text-primary-60"
+          className={`text-xs p-0 h-auto ${isEditing ? 'text-primary-60' : 'text-greyscale-20'} bg-transparent hover:bg-transparent hover:text-primary-60`}
           onClick={toggleEdit}
         >
           {isEditing ? '저장' : '수정'}
