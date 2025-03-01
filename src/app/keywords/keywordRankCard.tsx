@@ -53,10 +53,7 @@ export default function KeywordRankCard({ rank, keyword }: Props) {
           <span className="ml-[6px] group-hover:text-greyscale-90">{keyword}</span>
         </div>
         <Button
-          onClick={() => {
-            console.log('teo onClick');
-            setShowDialog(true);
-          }}
+          onClick={() => setShowDialog(true)}
           variant="outline"
           className="py-2 px-3 border-greyscale-80 bg-greyscale-90 text-greyscale-20 group-hover:text-primary-60"
         >

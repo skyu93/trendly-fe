@@ -28,10 +28,13 @@ function Navigation() {
           홈
         </span>
       </Link>
-      <div className="w-40 h-full flex flex-col items-center justify-center gap-1">
-        <SvgIcon id="annotation-dots" color="greyscale-40" />
-        <span className="text-greyscale-40 text-[10px]">채팅</span>
-      </div>
+
+      <Link href={ROUTE_PATH.CHATS} className="w-40 h-full flex flex-col items-center justify-center gap-1">
+        <SvgIcon id="annotation-dots" color={isCurrentPage(ROUTE_PATH.CHATS) ? 'primary' : 'greyscale-40'} />
+        <span className={`text-[10px] ${isCurrentPage(ROUTE_PATH.CHATS) ? 'text-greyscale-10' : 'text-greyscale-40'}`}>
+          채팅
+        </span>
+      </Link>
       <Link href={ROUTE_PATH.MY} className="w-40 h-full flex flex-col items-center justify-center gap-1">
         <SvgIcon id="user" color={isCurrentPage(ROUTE_PATH.MY) ? 'primary' : 'greyscale-40'} />
         <span className={`text-[10px] ${isCurrentPage(ROUTE_PATH.MY) ? 'text-greyscale-10' : 'text-greyscale-40'}`}>
