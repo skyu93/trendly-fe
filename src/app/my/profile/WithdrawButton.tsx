@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button/Button';
 
-export function WithdrawButton() {
+export function WithdrawButton({ isEditing }: { isEditing: boolean }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleWithdrawal = async () => {
@@ -23,11 +23,11 @@ export function WithdrawButton() {
   return (
     <Button
       variant="outline"
-      className="w-full h-10 border-gray-700 text-[#E97979] hover:text-red-300 hover:bg-gray-900"
+      className="w-full h-10 text-[#E97979] disabled:bg-transparent disabled:text-greyscale-60"
       onClick={handleWithdrawal}
-      disabled={isLoading}
+      disabled={isLoading || isEditing}
     >
-      {isLoading ? '처리중...' : '회원 탈퇴'}
+      탈퇴하기
     </Button>
   );
 }
