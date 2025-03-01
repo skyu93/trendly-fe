@@ -6,6 +6,7 @@ export const ROUTE_PATH = {
   KEYWORDS: '/keywords',
   MY: '/my',
   PROFILE: '/my/profile',
+  WITHDRAW: '/my/withdraw',
 } as const;
 export type RoutePath = Union<typeof ROUTE_PATH>;
 

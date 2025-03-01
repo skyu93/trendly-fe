@@ -60,7 +60,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SideContainer />
-        <main>
+        <main id="main">
           <GlobalHeader />
           <div className="mt-[49px] mb-[60px] h-[calc(100vh-109px)]">{children}</div>
           <GlobalFooterNavi />
