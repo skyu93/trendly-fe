@@ -1,8 +1,8 @@
-import SvgIcon from '@/components/SvgIcon';
-import { Button } from '@/components/ui/button/Button';
 import Link from 'next/link';
 import { ROUTE_PATH } from '@/constants/route';
+import SvgIcon from '@/components/SvgIcon';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button/Button';
 
 export default function MyPage() {
   return (
@@ -43,7 +43,7 @@ export default function MyPage() {
         </a>
       </div>
       <Button variant="outline" className="mb-6">
-        로그 아웃
+        로그아웃
       </Button>
     </div>
   );
