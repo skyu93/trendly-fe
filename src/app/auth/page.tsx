@@ -13,6 +13,7 @@ export default function KakaoCallback() {
     </Suspense>
   );
 }
+const splashDelay = () => new Promise<void>(resolve => setTimeout(resolve, 3000));
 
 function KakaoCallbackContent() {
   const router = useRouter();
@@ -27,17 +28,19 @@ function KakaoCallbackContent() {
         return;
       }
 
-      const authToken = await getToken(code);
+      const [authToken] = await Promise.all([getToken(code), splashDelay()]);
+
       if (isNil(authToken)) {
         router.push(ROUTE_PATH.LOGIN);
         return;
       }
       // 로그인 성공시
       console.log('Token :', authToken);
+      router.push(ROUTE_PATH.KEYWORDS);
     };
 
     handleKakaoCallback();
   }, [router, searchParams, getToken]);
 
-  return <div>로그인중...</div>;
+  return <Splash />;
 }
