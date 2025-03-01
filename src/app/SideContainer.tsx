@@ -5,7 +5,7 @@ export default function SideContainer() {
   return (
     <div className="fixed left-0 z-0 h-full w-[calc(50vw+45px)] items-center overflow-hidden hidden lg:flex lg:p-16 xl:p-40">
       <div className="max-w-md">
-        <Image src={logoHorizontal} alt="로고 이미지" className="mb-8 md:mb-10" />
+        <Image priority src={logoHorizontal} alt="로고 이미지" className="mb-8 md:mb-10" />
 
         <div>
           <h2 className="text-6xl font-bold text-white leading-tight whitespace-nowrap">
