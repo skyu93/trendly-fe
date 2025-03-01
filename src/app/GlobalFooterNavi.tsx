@@ -2,19 +2,12 @@
 
 import { usePageMeta } from '@/hooks/page-meta/usePageMeta';
 import SvgIcon from '@/components/SvgIcon';
-import { Suspense, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { ROUTE_PATH, RoutePath } from '@/constants/route';
 import Link from 'next/link';
 import { includes } from 'es-toolkit/compat';
 
 export function GlobalFooterNavi() {
-  return (
-    <Suspense fallback={<div></div>}>
-      <Navigation />
-    </Suspense>
-  );
-}
-function Navigation() {
   const { pageMeta } = usePageMeta();
 
   const isCurrentPage = useCallback(
@@ -40,7 +33,7 @@ function Navigation() {
         </Link>
         <div className="w-40 h-full flex flex-col items-center justify-center gap-1">
           <SvgIcon id="annotation-dots" color="greyscale-40" />
-          <span className="text-greyscale-40 text-[10px]">리스트</span>
+          <span className="text-greyscale-40 text-[10px]">채팅</span>
         </div>
         <Link href={ROUTE_PATH.MY} className="w-40 h-full flex flex-col items-center justify-center gap-1">
           <SvgIcon id="user" color={isCurrentPage(ROUTE_PATH.MY) ? 'primary' : 'greyscale-40'} />
