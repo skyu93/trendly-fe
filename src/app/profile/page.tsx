@@ -1,8 +1,8 @@
 'use client';
-import { WithdrawButton } from '@/app/my/profile/WithdrawButton';
-import { LoginInfoSection } from '@/app/my/profile/LoginInfoSection';
-import { MemberInfoSection } from '@/app/my/profile/MemberInfoSection';
-import { MarketingSection } from '@/app/my/profile/MarketingSection';
+import { WithdrawButton } from '@/app/profile/WithdrawButton';
+import { LoginInfoSection } from '@/app/profile/LoginInfoSection';
+import { MemberInfoSection } from '@/app/profile/MemberInfoSection';
+import { MarketingSection } from '@/app/profile/MarketingSection';
 import { useState } from 'react';
 
 // 회원 정보 타입 정의

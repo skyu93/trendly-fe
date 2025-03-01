@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks/auth/useAuth';
 import { ROUTE_PATH } from '@/constants/route';
 import { isNil } from 'es-toolkit/compat';
-import { useSplash } from '@/hooks/useSplash';
 import { Splash } from '@/components/Splash';
 
 export default function KakaoCallback() {
@@ -14,18 +13,12 @@ export default function KakaoCallback() {
     </Suspense>
   );
 }
+const splashDelay = () => new Promise<void>(resolve => setTimeout(resolve, 3000));
 
 function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { getToken } = useAuth();
-  const { showSplash, isSplashVisible } = useSplash();
-
-  useEffect(() => {
-    if (!isSplashVisible) {
-      router.push(ROUTE_PATH.LOGIN);
-    }
-  }, [router, isSplashVisible]);
 
   useEffect(() => {
     const handleKakaoCallback = async () => {
@@ -35,18 +28,19 @@ function KakaoCallbackContent() {
         return;
       }
 
-      const authToken = await getToken(code);
+      const [authToken] = await Promise.all([getToken(code), splashDelay()]);
+
       if (isNil(authToken)) {
         router.push(ROUTE_PATH.LOGIN);
         return;
       }
       // 로그인 성공시
       console.log('Token :', authToken);
-      showSplash();
+      router.push(ROUTE_PATH.KEYWORDS);
     };
 
     handleKakaoCallback();
-  }, [router, searchParams, getToken, showSplash]);
+  }, [router, searchParams, getToken]);
 
-  return <div>로그인중...</div>;
+  return <Splash />;
 }

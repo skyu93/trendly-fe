@@ -5,8 +5,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
 import localFont from 'next/font/local';
 import SideContainer from '@/app/SideContainer';
-import { GlobalHeader } from '@/app/GlobalHeader';
-import { GlobalFooterNavi } from '@/app/GlobalFooterNavi';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -61,9 +59,7 @@ export default function RootLayout({
       <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SideContainer />
         <main id="main">
-          <GlobalHeader />
           <div className="mt-[49px] mb-[60px] h-[calc(100vh-109px)]">{children}</div>
-          <GlobalFooterNavi />
         </main>
       </body>
     </html>

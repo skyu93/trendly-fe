@@ -1,0 +1,20 @@
+'use client';
+
+import GlobalHeader from '@/app/GlobalHeader';
+import SvgIcon from '@/components/SvgIcon';
+import { useRouter } from 'next/navigation';
+
+export default function ProfileHeader() {
+  const router = useRouter();
+  const goToBack = () => router.back();
+  return (
+    <GlobalHeader>
+      <GlobalHeader.Icon>
+        <div onClick={goToBack}>
+          <SvgIcon id="arrow-left" className="text-greyscale-40 cursor-pointer hover:text-greyscale-30" />
+        </div>
+      </GlobalHeader.Icon>
+      <GlobalHeader.Title>회원 정보</GlobalHeader.Title>
+    </GlobalHeader>
+  );
+}

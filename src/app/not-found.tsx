@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function notFound() {
   return (
     <div className="w-full h-screen px-6 relative flex flex-col items-center justify-center bg-primary text-greyscale-90">
-      <Image src={logoError} alt="logo" className="" />
+      <Image src={logoError} alt="logo" />
       <div className="w-full mt-6 flex flex-col items-center gap-y-3">
         <div className="text-[32px] font-extrabold">Oops!</div>
         <div>페이지를 찾을 수 없어요.</div>
