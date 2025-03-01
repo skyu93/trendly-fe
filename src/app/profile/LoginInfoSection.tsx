@@ -11,7 +11,7 @@ export function LoginInfoSection({ email }: { email: string }) {
       <Card className="bg-[#1C1C1C] border-none rounded-xl">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
-            <Image width={21} height={21} src={kakao} alt="로고 이미지" />
+            <Image priority width={21} height={21} src={kakao} alt="로고 이미지" />
             <div>
               <div className="text-greyscale-10 font-medium">카카오톡 계정 연결</div>
               <div className="text-greyscale-50 text-sm">{email}</div>
