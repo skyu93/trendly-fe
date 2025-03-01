@@ -3,7 +3,6 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ReactNode } from 'react';
-import SplashScreen from '@/app/SplashScreen';
 import localFont from 'next/font/local';
 import SideContainer from '@/app/SideContainer';
 import { GlobalHeader } from '@/app/GlobalHeader';
@@ -61,8 +60,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SideContainer />
-        <main>
-          <SplashScreen />
+        <main id="main">
           <GlobalHeader />
           <div className="mt-[49px] mb-[60px] h-[calc(100vh-109px)]">{children}</div>
           <GlobalFooterNavi />

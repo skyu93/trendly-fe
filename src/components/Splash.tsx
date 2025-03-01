@@ -7,8 +7,8 @@ export function Splash() {
       <div className="animate-pulse">
         <Image src={logoWithBrandImg} alt="로고 이미지" />
       </div>
-      <div className="mt-8">
-        <span className="font-bold">당신의 생각이 트렌드가 되는 순간</span>
+      <div className="mt-5">
+        <span className="text-greyscale-30">당신의 생각이 트렌드가 되는 순간</span>
       </div>
     </div>
   );
