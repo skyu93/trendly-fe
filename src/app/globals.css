@@ -39,6 +39,9 @@ body {
 
     --bg-01: #131517;
     --bg-02: #212121;
+
+    --header-height: 49px;
+    --footer-height: 60px;
   }
 }
 
@@ -61,6 +64,11 @@ body {
     background-color: var(--background);
     margin: 0 auto;
     color: #FFFFFF;
+  }
+  .page-container {
+    margin-top: var(--header-height);
+    margin-bottom: var(--footer-height);
+    height: calc(100vh - (var(--header-height) + var(--footer-height)));
   }
 }
 

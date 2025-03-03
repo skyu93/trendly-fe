@@ -61,7 +61,7 @@ export default function RootLayout({
         <SvgSprites />
         <SideContainer />
         <main id="main">
-          <div className="mt-[49px] mb-[60px] h-[calc(100vh-109px)]">{children}</div>
+          <div className="w-full h-full">{children}</div>
         </main>
       </body>
     </html>
