@@ -1,6 +1,6 @@
 'use client';
 
-import SvgIcon from '@/components/SvgIcon';
+import SvgIcon from '@/components/icon/SvgIcon';
 import { Suspense, useCallback } from 'react';
 import { ROUTE_PATH, RoutePath } from '@/constants/route';
 import Link from 'next/link';

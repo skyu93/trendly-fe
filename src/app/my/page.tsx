@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ROUTE_PATH } from '@/constants/route';
-import SvgIcon from '@/components/SvgIcon';
+import SvgIcon from '@/components/icon/SvgIcon';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button/Button';
 

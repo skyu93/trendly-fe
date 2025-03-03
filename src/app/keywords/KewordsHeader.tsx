@@ -1,6 +1,6 @@
 'use client';
 import GlobalHeader from '@/app/GlobalHeader';
-import SvgIcon from '@/components/SvgIcon';
+import SvgIcon from '@/components/icon/SvgIcon';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { ROUTE_PATH } from '@/constants/route';

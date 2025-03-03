@@ -1,5 +1,5 @@
 import GlobalHeader from '@/app/GlobalHeader';
-import SvgIcon from '@/components/SvgIcon';
+import SvgIcon from '@/components/icon/SvgIcon';
 
 export default function ChatsHeader() {
   return (

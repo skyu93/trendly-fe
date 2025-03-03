@@ -1,4 +1,4 @@
-import SvgIcon from '@/components/SvgIcon';
+import SvgIcon from '@/components/icon/SvgIcon';
 import {
   AlertDialog,
   AlertDialogAction,

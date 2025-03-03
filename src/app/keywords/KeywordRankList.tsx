@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import KeywordRankCard from '@/app/keywords/keywordRankCard';
-import SvgIcon from '@/components/SvgIcon';
+import SvgIcon from '@/components/icon/SvgIcon';
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 
