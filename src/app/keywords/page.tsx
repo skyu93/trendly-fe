@@ -43,7 +43,7 @@ export default function Main() {
   }, [filterPeriod, monthly, weekly, daily]);
 
   return (
-    <Tabs defaultValue={currentTab} className="w-full h-full px-4" onValueChange={v => setCurrentTab(v as TabValue)}>
+    <Tabs defaultValue={currentTab} className="page-container px-4" onValueChange={v => setCurrentTab(v as TabValue)}>
       <TabsList className="grid grid-cols-4">
         {map(TAB_LIST, ({ label, value }) => {
           return (

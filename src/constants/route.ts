@@ -6,8 +6,9 @@ export const ROUTE_PATH = {
   KEYWORDS: '/keywords',
   KEYWORDS_FILTER: '/keywords/filter',
   MY: '/my',
-  WITHDRAW: '/my/withdraw',
+  WITHDRAW: '/withdraw',
   PROFILE: '/profile',
+  CHAT: '/chat',
   CHATS: '/chats',
 } as const;
 export type RoutePath = Union<typeof ROUTE_PATH>;

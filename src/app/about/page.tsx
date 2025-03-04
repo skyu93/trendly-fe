@@ -89,7 +89,7 @@ function PageContent() {
     if (step === 1) {
       return (
         <div className="w-full">
-          <Image src={Step1} alt="온보딩 1단계" priority={true} className="w-full h-auto object-contain" />
+          <Image src={Step1} alt="온보딩 1단계" priority={true} className="w-full h-[343px] object-contain" />
           <div className="flex flex-col font-bold my-14">
             <span className="text-primary-10">
               흩어져 있는 <span className="text-primary-70">트렌트 키워드!</span>
@@ -101,7 +101,7 @@ function PageContent() {
     } else if (step === 2) {
       return (
         <div className="w-full">
-          <Image src={Step2} alt="온보딩 2단계" priority={true} className="w-full h-auto object-contain" />
+          <Image src={Step2} alt="온보딩 2단계" priority={true} className="w-full h-[343px] object-contain" />
           <div className="flex flex-col font-bold my-14">
             <span className="text-primary-10">다양한 플랫폼에서</span>
             <span className="text-primary-10">
@@ -113,7 +113,7 @@ function PageContent() {
     } else if (step === 3) {
       return (
         <div className="w-full">
-          <Image src={Step3} alt="온보딩 3단계" priority={true} className="w-full h-auto object-contain" />
+          <Image src={Step3} alt="온보딩 3단계" priority={true} className="w-full h-[343px] object-contain" />
           <div className="flex flex-col font-bold my-14">
             <span className="text-primary-10">
               실시간으로 <span className="text-primary-60">대화, 공감</span>하고
@@ -131,8 +131,11 @@ function PageContent() {
 
   return (
     <div className="h-full flex flex-col items-center justify-center">
-      <div className="absolute top-5 right-5 text-sm hover:cursor-pointer hover:font-bold" onClick={handleSkip}>
-        건너뛰기
+      <div
+        className="w-full h-12 px-4 flex items-center justify-end text-sm hover:cursor-pointer hover:font-bold"
+        onClick={handleSkip}
+      >
+        <span>건너뛰기</span>
       </div>
       <div className="w-full flex flex-col items-center text-center gap-8">
         {renderStepContent()}

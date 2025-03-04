@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button/Button';
 
 export default function MyPage() {
   return (
-    <div className="w-full h-full flex flex-col justify-between pt-6 px-4 text-sm">
+    <div className="page-container flex flex-col justify-between px-4 text-sm">
       <div className="flex flex-col gap-y-3">
         <Link href={ROUTE_PATH.PROFILE} className="flex items-center justify-between h-12 hover:text-primary">
           <div>회원 정보</div>

@@ -47,7 +47,6 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  userScalable: false,
 };
 
 export default function RootLayout({
@@ -60,9 +59,7 @@ export default function RootLayout({
       <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SvgSprites />
         <SideContainer />
-        <main id="main">
-          <div className="w-full h-full">{children}</div>
-        </main>
+        <main id="main">{children}</main>
       </body>
     </html>
   );

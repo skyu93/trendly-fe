@@ -11,6 +11,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button/Button';
 import { useRef, useState } from 'react';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input/Input';
+import { useRouter } from 'next/navigation';
+import { ROUTE_PATH } from '@/constants/route';
 
 interface Props {
   rank: number;
@@ -24,10 +28,13 @@ function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean)
       <AlertDialogContent className="w-[80%]">
         <AlertDialogHeader>
           <AlertDialogTitle>닉네임 설정</AlertDialogTitle>
-          <AlertDialogDescription className="text-center">
-            <div className="flex flex-col">
-              <span>개발중 입니다!</span>
-            </div>
+          <AlertDialogDescription className="flex flex-col items-center justify-center">
+            <Avatar className="w-20 h-20">
+              <AvatarImage src="logo.svg" className="bg-greyscale-20" />
+            </Avatar>
+            <Input className="mt-4 mb-6" placeholder="닉네임을 입력해주세요." dataType="count" />
+            <span className="text-xs text-greyscale-30">닉네임은 키워드별로 다르게 설정할 수 있어요.</span>
+            <span className="text-xs text-greyscale-30">한/영/숫자 중 1개 이상을 사용해서 입력 가능해요.</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -43,6 +50,7 @@ function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean)
 
 export default function KeywordRankCard({ rank, keyword }: Props) {
   const [showDialog, setShowDialog] = useState(false);
+  const router = useRouter();
   return (
     <>
       <div className="group flex items-center justify-between px-3 h-[67px] rounded-lg hover:bg-greyscale-20">
@@ -64,7 +72,9 @@ export default function KeywordRankCard({ rank, keyword }: Props) {
       <ChatDialog
         open={showDialog}
         onClose={(actionState: boolean) => {
-          console.log('chat: ', actionState);
+          if (actionState) {
+            router.push(ROUTE_PATH.CHAT);
+          }
           setShowDialog(false);
         }}
       />

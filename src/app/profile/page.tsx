@@ -22,7 +22,7 @@ export default function Page() {
   };
   const [isEditing, setIsEditing] = useState(false);
   return (
-    <div className="w-full h-full flex flex-col justify-between mt-3 px-4 text-greyscale-10">
+    <div className="page-container flex flex-col justify-between px-4 text-greyscale-10">
       <div>
         <LoginInfoSection email={memberInfo.email} />
         <MemberInfoSection memberInfo={memberInfo} isEditing={isEditing} setIsEditing={setIsEditing} />
