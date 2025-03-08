@@ -52,7 +52,7 @@ export function MarketingSection({ memberInfo, isEditing }: Props) {
               <span>
                 제공되는 정보에 대한 상세 내용은
                 <a
-                  href="https://sprout-shallot-70b.notion.site/1-Trendly-19009a18538e80bcbc55f33b8f8e9b8a"
+                  href="https://www.notion.so/19b09a18538e80de9913d839acaf2900"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline"
