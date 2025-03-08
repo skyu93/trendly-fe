@@ -5,7 +5,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio/RadioGroup';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import DateInput from '@/components/ui/input/DateInput';
+import { Input } from '@/components/ui/input/Input';
+import { join } from 'es-toolkit/compat';
 
 type MemberInfo = {
   email: string;
@@ -22,7 +23,7 @@ interface Props {
 
 export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props) {
   const [gender, setGender] = useState(memberInfo.gender);
-  const [birthdate, setBirthdate] = useState(memberInfo.birthdate);
+  const [birthdate] = useState(join(memberInfo.birthdate.split('-'), ''));
 
   const toggleEdit = () => {
     if (isEditing) {
@@ -33,13 +34,13 @@ export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props
   };
 
   const birthdateLabel = useMemo(() => {
-    const [year, month, day] = birthdate.split('-');
+    const [year, month, day] = memberInfo.birthdate.split('-');
     return `${year}년 ${month}월 ${day}일`;
-  }, [birthdate]);
+  }, [memberInfo.birthdate]);
 
-  const handleDateInput = (date: string) => {
-    setBirthdate(date);
-  };
+  // const handleDateInput = (date: string) => {
+  //   setBirthdate(date);
+  // };
 
   return (
     <div className="mb-6">
@@ -80,8 +81,9 @@ export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props
             <div>
               <div className="text-greyscale-40 text-sm mb-1">생년월일</div>
               {isEditing ? (
-                <DateInput value={memberInfo.birthdate} onChange={handleDateInput} />
+                <Input className="mt-4 mb-6" maxLength={8} type="number" value={birthdate} placeholder="20000101" />
               ) : (
+                // <DateInput value={memberInfo.birthdate} onChange={handleDateInput} />
                 <div className="text-greyscale-10">{birthdateLabel}</div>
               )}
             </div>

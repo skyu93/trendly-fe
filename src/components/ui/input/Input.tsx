@@ -44,24 +44,50 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, variant, inputSize, inputWidth, dataType, maxLength = 10, ...props }, ref) => {
     const [value, setValue] = React.useState('');
 
+    // number 타입 input의 화살표 UI 제거를 위한 스타일
+    const numberInputStyle =
+      type === 'number'
+        ? {
+            WebkitAppearance: 'none',
+            MozAppearance: 'textfield',
+            appearance: 'textfield',
+            margin: 0,
+          }
+        : {};
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (maxLength) {
-        setValue(e.target.value.slice(0, maxLength)); // maxLength 초과 방지
+      // number 타입인 경우 숫자만 입력 허용
+      if (type === 'number') {
+        const numericValue = e.target.value.replace(/[^0-9]/g, '');
+
+        if (maxLength) {
+          setValue(numericValue.slice(0, maxLength));
+          e.target.value = numericValue.slice(0, maxLength);
+        } else {
+          setValue(numericValue);
+          e.target.value = numericValue;
+        }
       } else {
-        setValue(e.target.value);
+        if (maxLength) {
+          setValue(e.target.value.slice(0, maxLength));
+        } else {
+          setValue(e.target.value);
+        }
       }
+
       if (props.onChange) props.onChange(e);
     };
 
     return (
       <div className="relative w-full">
         <input
-          type={type}
+          type={type === 'number' ? 'text' : type} // number 타입을 text로 변경하고 직접 제어
           className={cn(inputVariants({ variant, inputSize, inputWidth, dataType }), className)}
           ref={ref}
           maxLength={maxLength}
           value={value}
           onChange={handleChange}
+          style={numberInputStyle}
           {...props}
         />
         {dataType === 'count' && maxLength && (
