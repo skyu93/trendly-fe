@@ -45,7 +45,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const [value, setValue] = React.useState('');
 
     // number 타입 input의 화살표 UI 제거를 위한 스타일
-    const numberInputStyle =
+    const numberInputStyle: React.CSSProperties =
       type === 'number'
         ? {
             WebkitAppearance: 'none',
