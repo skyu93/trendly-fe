@@ -15,6 +15,9 @@ export default function ChatsPage() {
   const [currentTab, setCurrentTab] = useState<TabValue>('popularity');
 
   const ranks = useMemo(() => {
+    if (currentTab === 'my') {
+      return [];
+    }
     return Array.from({ length: 30 }).map((_, i) => ({
       title: `키워드 ${i}`,
       chatRoomUrl: `${currentTab}/${i}`,
@@ -37,6 +40,17 @@ export default function ChatsPage() {
         return (
           <TabsContent key={value} value={value} className="w-full h-[calc(100%-36px)]">
             <ChatRoomList list={ranks} />
+            {ranks.length > 0 ? (
+              <ChatRoomList list={ranks} />
+            ) : (
+              <div className="absolute inset-0 m-auto w-fit h-fit">
+                <div className="flex flex-col items-center justify-center text-greyscale-40">
+                  <span className="text-xs mb-3">참여한 채팅방이 없어요.</span>
+                  <span className="text-xs">키워드 순위와 인기 채팅방 확인을 통해</span>
+                  <span className="text-xs">채팅방에 참여해 보세요!</span>
+                </div>
+              </div>
+            )}
           </TabsContent>
         );
       })}
