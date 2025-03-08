@@ -9,15 +9,14 @@ import Image from 'next/image';
 import Step1 from '@/assets/on-boarding/step-1.png';
 import Step2 from '@/assets/on-boarding/step-2.png';
 import Step3 from '@/assets/on-boarding/step-3.png';
-import { Splash } from '@/components/Splash';
 import { map } from 'es-toolkit/compat';
+import { Splash } from '@/components/Splash';
 
 const STEPS = [
   { image: Step1, alt: '온보딩 1단계' },
   { image: Step2, alt: '온보딩 2단계' },
   { image: Step3, alt: '온보딩 3단계' },
 ];
-const splashDelay = () => new Promise<void>(resolve => setTimeout(resolve, 3000));
 
 export default function Page() {
   return (
@@ -31,7 +30,6 @@ function PageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
-  const [imagesPreloaded, setImagesPreloaded] = useState<boolean>(false);
 
   useEffect(() => {
     const stepFromQuery = Number(searchParams.get('step')) || 1;
@@ -52,12 +50,9 @@ function PageContent() {
               img.onerror = () => resolve(); // 에러 발생시에도 진행
             });
           }),
-          splashDelay(),
         ]);
-        setImagesPreloaded(true);
       } catch (error) {
         console.error(error);
-        setImagesPreloaded(true); // 에러가 발생하더라도 계속 진행
       }
     };
 
@@ -79,10 +74,6 @@ function PageContent() {
   }, [router]);
 
   const progressPercent = (step / STEPS.length) * 100;
-
-  if (!imagesPreloaded) {
-    return <Splash />;
-  }
 
   // 각 단계별 컨텐츠 렌더링
   const renderStepContent = () => {
