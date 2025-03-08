@@ -42,9 +42,6 @@ COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 
-# 헬스 체크 API를 위한 디렉토리 구조 유지
-COPY --from=builder /app/pages/api ./pages/api
-
 # 프로덕션 의존성만 설치
 RUN pnpm install --prod --frozen-lockfile
 
