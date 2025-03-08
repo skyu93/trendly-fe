@@ -31,6 +31,7 @@ WORKDIR /app
 # 환경 설정
 ENV NODE_ENV=production
 ENV PORT=80
+ENV CI=true
 
 # pnpm 설치
 RUN npm install -g pnpm
