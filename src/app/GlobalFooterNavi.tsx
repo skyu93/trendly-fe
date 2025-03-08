@@ -33,9 +33,9 @@ function Navigation() {
         </span>
       </Link>
       <Link href={ROUTE_PATH.CHATS} className="flex-1 h-full flex flex-col items-center justify-center gap-1">
-        <SvgIcon id="annotation-dots" color={isCurrentPage(ROUTE_PATH.CHATS) ? 'primary' : 'greyscale-40'} />
+        <SvgIcon id="chat" color={isCurrentPage(ROUTE_PATH.CHATS) ? 'primary' : 'greyscale-40'} />
         <span className={`text-[10px] ${isCurrentPage(ROUTE_PATH.CHATS) ? 'text-greyscale-10' : 'text-greyscale-40'}`}>
-          채팅
+          채팅목록
         </span>
       </Link>
       <Link href={ROUTE_PATH.MY} className="flex-1 h-full flex flex-col items-center justify-center gap-1">
