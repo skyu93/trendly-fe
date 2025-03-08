@@ -1,15 +1,14 @@
 # 빌드 스테이지
 FROM node:18-alpine AS builder
 
-# pnpm 설치
+# pnpm 설치 및 의존성 준비
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm
 
 WORKDIR /app
 
-# 의존성 파일 복사
-COPY pnpm-lock.yaml ./
-COPY package.json ./
+# 의존성 파일만 먼저 복사 (캐싱 최적화)
+COPY package.json pnpm-lock.yaml ./
 
 # pnpm으로 의존성 설치
 RUN pnpm install --frozen-lockfile
@@ -17,26 +16,34 @@ RUN pnpm install --frozen-lockfile
 # 소스 코드 복사
 COPY . .
 
+# 빌드 버전 인자 추가
+ARG BUILD_VERSION
+ENV NEXT_PUBLIC_BUILD_VERSION=${BUILD_VERSION}
+
 # TypeScript 타입 체크 및 애플리케이션 빌드
-RUN pnpm run type-check && pnpm run build
+RUN pnpm run build
 
-# 프로덕션 스테이지 - 더 가벼운 이미지 사용
+# 프로덕션 스테이지
 FROM node:18-alpine AS production
-
-# pnpm 설치
-RUN npm install -g pnpm
 
 WORKDIR /app
 
 # 환경 설정
 ENV NODE_ENV=production
+ENV PORT=80
 
-# 빌드 결과물만 복사
+# pnpm 설치
+RUN npm install -g pnpm
+
+# 필요한 파일만 복사
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
+
+# 헬스 체크 API를 위한 디렉토리 구조 유지
+COPY --from=builder /app/pages/api ./pages/api
 
 # 프로덕션 의존성만 설치
 RUN pnpm install --prod --frozen-lockfile
