@@ -4,6 +4,7 @@ import KeywordRankCard from '@/app/keywords/keywordRankCard';
 import SvgIcon from '@/components/icon/SvgIcon';
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
+import { map } from 'es-toolkit/compat';
 
 interface Props {
   title: string;
@@ -32,12 +33,18 @@ export default function KeywordRankList({ title, list }: Props) {
       </div>
 
       <ScrollArea className="flex-1">
-        {list.map(({ rank, keyword }) => (
+        {map(list, ({ rank, keyword }) => (
           <div key={keyword}>
             <KeywordRankCard rank={rank} keyword={keyword} />
             <Separator className="bg-greyscale-80" />
           </div>
         ))}
+        {list.length > 0 && (
+          <div className="h-[67px] flex flex-col items-end text-greyscale-60 mt-3 text-[10px]">
+            <span>서비스에서 제공하는 키워드는 특정 기준에 따라 선정된 것으로</span>
+            <span>실제 실시간 키워드와 다를 수 있습니다.</span>
+          </div>
+        )}
       </ScrollArea>
     </div>
   );
