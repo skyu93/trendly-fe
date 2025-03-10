@@ -6,9 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
 import { ROUTE_PATH } from '@/constants/route';
 import Image from 'next/image';
-import Step1 from '@/assets/on-boarding/step-1.png';
-import Step2 from '@/assets/on-boarding/step-2.png';
-import Step3 from '@/assets/on-boarding/step-3.png';
+import Step1 from '@/assets/on-boarding/step-1.webp';
+import Step2 from '@/assets/on-boarding/step-2.webp';
+import Step3 from '@/assets/on-boarding/step-3.webp';
 import { map } from 'es-toolkit/compat';
 import { Splash } from '@/components/Splash';
 
@@ -121,7 +121,7 @@ function PageContent() {
   };
 
   return (
-    <div className="h-full flex flex-col items-center justify-center">
+    <div className="w-full h-screen flex flex-col items-center justify-center">
       <div
         className="w-full h-12 px-4 flex items-center justify-end text-sm hover:cursor-pointer hover:font-bold"
         onClick={handleSkip}
