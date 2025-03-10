@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import logoHorizontal from '@/assets/logo-horizontal.png';
+import logoHorizontal from '@/assets/logo-horizontal.webp';
 
 export default function SideContainer() {
   return (
