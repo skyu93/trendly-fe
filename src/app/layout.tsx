@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import localFont from 'next/font/local';
 import SideContainer from '@/app/SideContainer';
 import SvgSprites from '@/components/icon/SvgSprites';
+import GlobalErrorBoundary from '@/app/GlobalErrorBoundary';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -49,17 +50,15 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="ko">
       <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SvgSprites />
         <SideContainer />
-        <main id="main">{children}</main>
+        <main id="main">
+          <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
+        </main>
       </body>
     </html>
   );
