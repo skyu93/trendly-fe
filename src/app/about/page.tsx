@@ -123,7 +123,7 @@ function PageContent() {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">
       <div
-        className="w-full h-12 px-4 flex items-center justify-end text-sm hover:cursor-pointer hover:font-bold"
+        className="absolute top-0 w-full h-12 px-4 flex items-center justify-end text-sm hover:cursor-pointer hover:font-bold"
         onClick={handleSkip}
       >
         <span>건너뛰기</span>
