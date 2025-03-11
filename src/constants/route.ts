@@ -2,6 +2,7 @@ import { Union } from '@/helper/type';
 
 export const ROUTE_PATH = {
   LOGIN: '/login',
+  LOGIN_INVITATION: '/login/invitation',
   ABOUT: '/about',
   KEYWORDS: '/keywords',
   KEYWORDS_FILTER: '/keywords/filter',
