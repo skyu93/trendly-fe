@@ -12,7 +12,7 @@ interface AlertDialogProps extends AlertDialogPrimitive.AlertDialogProps {
   containerSelector?: string;
 }
 
-const AlertDialog = ({ containerSelector, ...props }: AlertDialogProps) => {
+const AlertDialog = ({ containerSelector = '#main', ...props }: AlertDialogProps) => {
   return (
     <AlertDialogContext.Provider value={{ containerSelector }}>
       <AlertDialogPrimitive.Root {...props} />

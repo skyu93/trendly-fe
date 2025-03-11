@@ -24,7 +24,7 @@ interface Props {
 function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean) => void }) {
   const actionState = useRef(false);
   return (
-    <AlertDialog containerSelector="#main" open={open} onOpenChange={() => onClose(actionState.current)}>
+    <AlertDialog open={open} onOpenChange={() => onClose(actionState.current)}>
       <AlertDialogContent className="w-[80%]">
         <AlertDialogHeader>
           <AlertDialogTitle>닉네임 설정</AlertDialogTitle>
