@@ -2,16 +2,21 @@
 
 import { useAuth } from '@/hooks/auth/useAuth';
 import { Button } from '@/components/ui/button/Button';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 interface Props {
   className?: string;
 }
 
 export default function KakaoButton({ className }: Props) {
-  const { getAuthUrl } = useAuth();
-
+  const { getLoginPageUrl } = useAuth();
+  const { handleError } = useErrorHandler();
   const handleLogin = () => {
-    window.location.href = getAuthUrl;
+    try {
+      window.location.href = getLoginPageUrl();
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   return (

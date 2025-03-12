@@ -1,4 +1,3 @@
-'use client';
 import Link from 'next/link';
 import { ROUTE_PATH } from '@/constants/route';
 import KakaoButton from '@/app/login/kakaoButton';

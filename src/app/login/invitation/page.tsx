@@ -1,4 +1,3 @@
-'use client';
 import KakaoButton from '@/app/login/kakaoButton';
 import Image from 'next/image';
 import logo from '@/assets/logo.svg';
