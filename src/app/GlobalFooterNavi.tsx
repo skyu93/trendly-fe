@@ -5,19 +5,25 @@ import { Suspense, useCallback } from 'react';
 import { ROUTE_PATH, RoutePath } from '@/constants/route';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { MessageCircle } from 'lucide-react';
 
 export function GlobalFooterNavi() {
   return (
-    <Suspense fallback={<div />}>
+    <Suspense fallback={null}>
       <Navigation />
     </Suspense>
   );
 }
 
 function Navigation() {
+  const { isAuthenticated } = useAuth();
   const pathname = usePathname();
-
   const isCurrentPage = useCallback((path: RoutePath) => path === pathname, [pathname]);
+
+  if (!isAuthenticated()) {
+    return null;
+  }
 
   return (
     <nav
@@ -33,7 +39,7 @@ function Navigation() {
         </span>
       </Link>
       <Link href={ROUTE_PATH.CHATS} className="flex-1 h-full flex flex-col items-center justify-center gap-1">
-        <SvgIcon id="chat" color={isCurrentPage(ROUTE_PATH.CHATS) ? 'primary' : 'greyscale-40'} />
+        <MessageCircle className={isCurrentPage(ROUTE_PATH.CHATS) ? 'text-primary' : 'text-greyscale-40'} />
         <span className={`text-[10px] ${isCurrentPage(ROUTE_PATH.CHATS) ? 'text-greyscale-10' : 'text-greyscale-40'}`}>
           채팅목록
         </span>

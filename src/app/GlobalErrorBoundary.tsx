@@ -45,7 +45,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
 
   useEffect(() => {
     handleErrorRouter();
-  }, [error]);
+  }, [handleErrorRouter]);
 
   return (
     <>
