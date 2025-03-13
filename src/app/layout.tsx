@@ -33,12 +33,12 @@ export const metadata: Metadata = {
     title: 'Trendly',
     description: '당신의 생각이 트렌드가 되는 순간',
     type: 'website',
-    url: 'https://example.com',
+    url: 'https://trendly.kr',
     images: [
       {
-        url: 'https://example.com/og-image.jpg',
-        width: 800,
-        height: 600,
+        url: 'http://54.180.63.180:8080/thumbnail.jpg',
+        width: 704,
+        height: 352,
       },
     ],
   },
