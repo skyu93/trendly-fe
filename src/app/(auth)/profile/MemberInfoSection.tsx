@@ -6,41 +6,52 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio/RadioGroup';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input/Input';
-import { join } from 'es-toolkit/compat';
-
-type MemberInfo = {
-  email: string;
-  gender: string;
-  birthdate: string;
-  marketingConsent: boolean;
-};
+import { isEmpty, isNil, join } from 'es-toolkit/compat';
+import { Gender, UserInfo } from '@/services/user/user.type';
+import UserService from '@/services/user/userService';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 interface Props {
-  memberInfo: MemberInfo;
+  user: UserInfo;
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
 }
 
-export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props) {
-  const [gender, setGender] = useState(memberInfo.gender);
-  const [birthdate] = useState(join(memberInfo.birthdate.split('-'), ''));
-
+export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
+  const [gender, setGender] = useState<Gender | null>(user.gender);
+  const [birthdate] = useState<string>(user.birthDate ? join(user.birthDate.split('-')) : '');
+  const userService = useMemo(() => new UserService(), []);
+  const { setUser } = useAuth();
+  const { handleError } = useErrorHandler();
   const toggleEdit = () => {
+    const saveUser = async () => {
+      try {
+        const user = await userService.update({
+          gender: gender ?? undefined,
+          birthdate,
+        });
+        if (user) {
+          setUser(user);
+        }
+      } catch (error) {
+        handleError(error);
+      }
+    };
+
     if (isEditing) {
-      // 저장 로직 추가 가능
-      // 예: saveUserInfo({ gender, birthdate })
+      saveUser();
     }
     setIsEditing(!isEditing);
   };
 
   const birthdateLabel = useMemo(() => {
-    const [year, month, day] = memberInfo.birthdate.split('-');
+    if (isNil(birthdate) || isEmpty(birthdate)) {
+      return '생년월일을 입력해주세요.';
+    }
+    const [year, month, day] = birthdate.split('-');
     return `${year}년 ${month}월 ${day}일`;
-  }, [memberInfo.birthdate]);
-
-  // const handleDateInput = (date: string) => {
-  //   setBirthdate(date);
-  // };
+  }, [birthdate]);
 
   return (
     <div className="mb-6">
@@ -60,21 +71,21 @@ export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props
               <div className="text-greyscale-40 text-sm mb-2">성별</div>
               {isEditing ? (
                 <RadioGroup
-                  defaultValue={gender}
+                  defaultValue={gender as string}
                   className="flex items-center gap-x-4 text-greyscale-20"
-                  onValueChange={value => setGender(value)}
+                  onValueChange={(value: Gender) => setGender(value)}
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">남성</Label>
+                    <RadioGroupItem value="MALE" id="MALE" />
+                    <Label htmlFor="MALE">남성</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">여성</Label>
+                    <RadioGroupItem value="FEMALE" id="FEMALE" />
+                    <Label htmlFor="FEMALE">여성</Label>
                   </div>
                 </RadioGroup>
               ) : (
-                <div className="text-greyscale-10">{gender === 'male' ? '남성' : '여성'}</div>
+                <div className="text-greyscale-10">{gender ? (gender === 'MALE' ? '남성' : '여성') : '미선택'}</div>
               )}
             </div>
             <Separator className="bg-greyscale-80 my-3" />
@@ -83,7 +94,6 @@ export function MemberInfoSection({ memberInfo, isEditing, setIsEditing }: Props
               {isEditing ? (
                 <Input className="mt-4 mb-6" maxLength={8} type="number" value={birthdate} placeholder="20000101" />
               ) : (
-                // <DateInput value={memberInfo.birthdate} onChange={handleDateInput} />
                 <div className="text-greyscale-10">{birthdateLabel}</div>
               )}
             </div>

@@ -1,7 +1,7 @@
 'use client';
-import { WithdrawalButton } from '@/app/withdraw/WithdrawalButton';
+import { WithdrawalButton } from '@/app/(auth)/withdraw/WithdrawalButton';
 import { useState } from 'react';
-import WithdrawalNotice from '@/app/withdraw/WithdrawalNotice';
+import WithdrawalNotice from '@/app/(auth)/withdraw/WithdrawalNotice';
 import { Button } from '@/components/ui/button/Button';
 import { useRouter } from 'next/navigation';
 

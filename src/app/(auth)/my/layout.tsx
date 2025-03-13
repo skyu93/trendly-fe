@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
+import MyHeader from '@/app/(auth)/my/MyHeader';
 import { GlobalFooterNavi } from '@/app/GlobalFooterNavi';
-import CommentHeader from '@/app/comment/CommentHeader';
 
-export default function KeywordsLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function MyLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <>
-      <CommentHeader />
+      <MyHeader />
       {children}
       <GlobalFooterNavi />
     </>

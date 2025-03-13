@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import ChatRoomCard from '@/app/chats/ChatRoomCard';
+import ChatRoomCard from '@/app/(auth)/chats/ChatRoomCard';
 
 interface Props {
   list: {

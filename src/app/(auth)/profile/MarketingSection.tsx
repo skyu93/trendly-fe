@@ -1,31 +1,28 @@
 'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch/Switch';
-import { useState } from 'react';
-
-type MemberInfo = {
-  email: string;
-  gender: string;
-  birthdate: string;
-  marketingConsent: boolean;
-};
+import { useMemo, useState } from 'react';
+import { UserInfo } from '@/services/user/user.type';
+import UserService from '@/services/user/userService';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 interface Props {
-  memberInfo: MemberInfo;
+  user: UserInfo;
   isEditing: boolean;
 }
 
-export function MarketingSection({ memberInfo, isEditing }: Props) {
-  const [checked, setChecked] = useState(memberInfo.marketingConsent);
-
+export function MarketingSection({ user, isEditing }: Props) {
+  const [checked, setChecked] = useState(user.marketingOpt);
+  const userService = useMemo(() => new UserService(), []);
+  const { handleError } = useErrorHandler();
   const handleChange = async (checked: boolean) => {
     setChecked(checked);
-    // 여기서 API 요청을 보내서 서버에 동의 상태 업데이트
+
     try {
-      console.log('마케팅 동의 상태 업데이트:', checked);
+      await userService.update({ marketingOpt: checked });
     } catch (error) {
-      console.error('업데이트 실패:', error);
       setChecked(!checked); // 실패 시 상태 원복
+      handleError(error);
     }
   };
 

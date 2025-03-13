@@ -2,7 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useMemo, useState } from 'react';
 import { map } from 'es-toolkit/compat';
-import ChatRoomList from '@/app/chats/ChatRoomList';
+import ChatRoomList from '@/app/(auth)/chats/ChatRoomList';
 
 const TAB_LIST = [
   { label: '인기 채팅방', value: 'popularity' },

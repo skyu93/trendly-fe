@@ -46,7 +46,7 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
       >
         탈퇴하기
       </Button>
-      <AlertDialog containerSelector="#main" open={showDialog}>
+      <AlertDialog open={showDialog}>
         <AlertDialogContent className="w-[80%]">
           <AlertDialogHeader>
             <AlertDialogTitle>탈퇴하기</AlertDialogTitle>

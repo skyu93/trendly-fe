@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ROUTE_PATH } from '@/constants/route';
 import SvgIcon from '@/components/icon/SvgIcon';
 import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button/Button';
+import LogoutButton from '@/app/(auth)/my/LogoutButton';
 
 export default function MyPage() {
   return (
@@ -42,9 +42,7 @@ export default function MyPage() {
           <SvgIcon id="chevron-right" />
         </a>
       </div>
-      <Button variant="outline" className="mb-6">
-        로그아웃
-      </Button>
+      <LogoutButton />
     </div>
   );
 }
