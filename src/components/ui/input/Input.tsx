@@ -42,7 +42,12 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>,
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, variant, inputSize, inputWidth, dataType, maxLength = 10, ...props }, ref) => {
-    const [value, setValue] = React.useState('');
+    // 전달받은 value가 있으면 사용하고, 없으면 내부 상태 관리
+    const isControlled = props.value !== undefined;
+    const [internalValue, setInternalValue] = React.useState(props.defaultValue?.toString() || '');
+
+    // 현재 표시할 값 (외부 제어 또는 내부 상태)
+    const value = isControlled ? props.value?.toString() : internalValue;
 
     // number 타입 input의 화살표 UI 제거를 위한 스타일
     const numberInputStyle: React.CSSProperties =
@@ -56,26 +61,36 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         : {};
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let newValue = e.target.value;
+
       // number 타입인 경우 숫자만 입력 허용
       if (type === 'number') {
-        const numericValue = e.target.value.replace(/[^0-9]/g, '');
-
-        if (maxLength) {
-          setValue(numericValue.slice(0, maxLength));
-          e.target.value = numericValue.slice(0, maxLength);
-        } else {
-          setValue(numericValue);
-          e.target.value = numericValue;
-        }
-      } else {
-        if (maxLength) {
-          setValue(e.target.value.slice(0, maxLength));
-        } else {
-          setValue(e.target.value);
-        }
+        newValue = newValue.replace(/[^0-9]/g, '');
       }
 
-      if (props.onChange) props.onChange(e);
+      // maxLength 적용
+      if (maxLength) {
+        newValue = newValue.slice(0, maxLength);
+      }
+
+      // 내부 상태 업데이트 (비제어 컴포넌트인 경우만)
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+
+      // 원본 이벤트 객체의 값을 변경하여 상위 컴포넌트에 전달
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+
+      if (nativeInputValueSetter) {
+        nativeInputValueSetter.call(e.target, newValue);
+        const event = new Event('input', { bubbles: true });
+        e.target.dispatchEvent(event);
+      }
+
+      // onChange 콜백 호출
+      if (props.onChange) {
+        props.onChange(e);
+      }
     };
 
     return (
@@ -84,15 +99,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type === 'number' ? 'text' : type} // number 타입을 text로 변경하고 직접 제어
           className={cn(inputVariants({ variant, inputSize, inputWidth, dataType }), className)}
           ref={ref}
-          maxLength={maxLength}
           value={value}
           onChange={handleChange}
           style={numberInputStyle}
           {...props}
+          maxLength={undefined} // 직접 처리하므로 HTML maxLength 속성은 제거
         />
         {dataType === 'count' && maxLength && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-            {value.length}/{maxLength}자
+            {value?.length || 0}/{maxLength}자
           </div>
         )}
       </div>

@@ -24,16 +24,16 @@ export default function MarketingConsentDrawer() {
             <span>놓치지 마세요!</span>
           </DrawerTitle>
           <DrawerDescription className="flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center text-greyscale-30">
+            <span className="flex flex-col items-center justify-center text-greyscale-30">
               <span>트랜들리가 제공하는 최신 트랜드 소식,</span>
               <span>맞춤 콘텐츠, 특별혜택을 가장 먼저 받아보세요.</span>
-            </div>
-            <div className="flex flex-col items-center justify-center text-xs p-3 bg-greyscale-80 text-white rounded-[32px] mt-6">
+            </span>
+            <span className="flex flex-col items-center justify-center text-xs p-3 bg-greyscale-80 text-white rounded-[32px] mt-6">
               <span>마케팅 정보 수신 동의 철회는</span>
               <span>
                 마이 `{'>'}` 회원 정보 `{'>'} 마케팅 활용 동의에서 변경 가능합니다.
               </span>
-            </div>
+            </span>
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
