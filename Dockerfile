@@ -1,6 +1,14 @@
 # 빌드 스테이지
 FROM node:18-alpine AS builder
 
+# 빌드 인자 정의
+ARG NEXT_PUBLIC_KAKAO_CLIENT_ID
+ARG NODE_ENV=development
+
+# 환경 변수 설정
+ENV NODE_ENV=${NODE_ENV}
+ENV NEXT_PUBLIC_KAKAO_CLIENT_ID=${NEXT_PUBLIC_KAKAO_CLIENT_ID}
+
 # pnpm 설치 및 의존성 준비
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm
@@ -16,10 +24,6 @@ RUN pnpm install --frozen-lockfile
 # 소스 코드 복사
 COPY . .
 
-# 빌드 버전 인자 추가
-ARG BUILD_VERSION
-ENV NEXT_PUBLIC_BUILD_VERSION=${BUILD_VERSION}
-
 # TypeScript 타입 체크 및 애플리케이션 빌드
 RUN pnpm run build
 
@@ -28,10 +32,15 @@ FROM node:18-alpine AS production
 
 WORKDIR /app
 
+# 빌드 인자 재정의
+ARG NODE_ENV=development
+ARG NEXT_PUBLIC_KAKAO_CLIENT_ID
+
 # 환경 설정
-ENV NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 ENV PORT=80
 ENV CI=true
+ENV NEXT_PUBLIC_KAKAO_CLIENT_ID=${NEXT_PUBLIC_KAKAO_CLIENT_ID}
 
 # pnpm 설치
 RUN npm install -g pnpm
