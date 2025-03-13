@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     url: 'https://trendly.kr',
     images: [
       {
-        url: 'http://54.180.63.180:8080/thumbnail.jpg',
+        url: 'https://trendly-fe.vercel.app/thumbnail.jpg',
         width: 704,
         height: 352,
       },
