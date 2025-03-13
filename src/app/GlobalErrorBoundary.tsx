@@ -26,6 +26,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
 
       switch (code) {
         case ERROR_CODES.TOKEN_INVALID:
+        case ERROR_CODES.FORBIDDEN:
           // 토큰 만료 처리
           router.push(ROUTE_PATH.LOGIN_INVITATION);
           break;
@@ -38,6 +39,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
           console.error(error);
           break;
       }
+      console.error(error.message);
     } else if (error) {
       console.error(error);
     }
@@ -46,6 +48,10 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
   useEffect(() => {
     handleErrorRouter();
   }, [handleErrorRouter]);
+
+  const handleClearError = useCallback(() => {
+    setError(null);
+  }, [setError]);
 
   return (
     <>
@@ -59,7 +65,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction className="h-12" onClick={() => setError(null)}>
+            <AlertDialogAction className="h-12" onClick={handleClearError}>
               확인
             </AlertDialogAction>
           </AlertDialogFooter>
