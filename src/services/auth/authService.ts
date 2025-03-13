@@ -28,9 +28,10 @@ class AuthService {
       });
 
       TokenStorage.setToken({
-        token: accessToken,
+        accessToken,
         refreshToken,
-        expiresIn: accessTokenExpiresIn,
+        expiresAt: accessTokenExpiresIn,
+        user,
       });
 
       return user;
@@ -49,6 +50,11 @@ class AuthService {
 
   public isAuthenticated(): boolean {
     return TokenStorage.isTokenValid();
+  }
+
+  public getAuthData() {
+    TokenStorage.loadFromStorage();
+    return TokenStorage.getAuthData();
   }
 }
 

@@ -1,10 +1,19 @@
 import dayjs from 'dayjs';
+import { UserInfo } from '@/services/user/user.type';
+
+interface AuthData {
+  accessToken: string | null;
+  refreshToken: string | null;
+  expiresAt: number | null;
+  user: UserInfo | null;
+}
 
 export const TokenStorage = (() => {
   const tokenType = 'Bearer';
   let accessToken: string | null = null;
   let refreshToken: string | null = null;
   let expiresAt: dayjs.Dayjs | null = null;
+  let user: UserInfo | null = null;
   let isInitialized = false;
 
   const encrypt = (data: string): string => {
@@ -29,9 +38,10 @@ export const TokenStorage = (() => {
 
     try {
       const authData = JSON.stringify({
-        token: accessToken,
-        refresh: refreshToken,
-        expires: expiresAt ? expiresAt.valueOf() : 0,
+        accessToken,
+        refreshToken,
+        expiresAt: expiresAt ? expiresAt.valueOf() : 0,
+        user,
       });
 
       localStorage.setItem('trendly', encrypt(authData));
@@ -41,22 +51,26 @@ export const TokenStorage = (() => {
   };
 
   const loadFromStorage = (): void => {
-    if (!isBrowser()) return;
+    if (!isBrowser()) {
+      return;
+    }
 
     if (!isInitialized) {
       isInitialized = true;
 
       try {
         const encryptedData = localStorage.getItem('trendly');
-
-        if (!encryptedData) return;
+        if (!encryptedData) {
+          return;
+        }
 
         const decryptedData = decrypt(encryptedData);
-        const authData = JSON.parse(decryptedData);
+        const authData = JSON.parse(decryptedData) as AuthData;
 
-        accessToken = authData.token || null;
-        refreshToken = authData.refresh || null;
-        expiresAt = authData.expires ? dayjs(authData.expires) : null;
+        accessToken = authData.accessToken || null;
+        refreshToken = authData.refreshToken || null;
+        expiresAt = authData.expiresAt ? dayjs(authData.expiresAt) : null;
+        user = authData.user || null;
       } catch (error) {
         console.error(error);
         clearToken();
@@ -64,12 +78,11 @@ export const TokenStorage = (() => {
     }
   };
 
-  const setToken = (authData: { token: string; expiresIn: number; refreshToken: string }): void => {
-    const { token, expiresIn, refreshToken: newRefreshToken } = authData;
-
-    accessToken = token;
-    refreshToken = newRefreshToken;
-    expiresAt = dayjs().add(expiresIn, 'second');
+  const setToken = (authData: AuthData): void => {
+    accessToken = authData.accessToken;
+    refreshToken = authData.refreshToken;
+    expiresAt = authData.expiresAt ? dayjs().add(authData.expiresAt, 'second') : null;
+    user = authData.user;
     saveToStorage();
   };
 
@@ -77,14 +90,13 @@ export const TokenStorage = (() => {
     accessToken = null;
     refreshToken = null;
     expiresAt = null;
+    user = null;
     if (isBrowser()) {
       localStorage.removeItem('trendly');
     }
   };
 
   const isTokenValid = (): boolean => {
-    loadFromStorage(); // 토큰 사용 전에 항상 최신 상태 확인
-
     if (!accessToken) return false;
 
     if (expiresAt && dayjs().isAfter(expiresAt)) {
@@ -95,37 +107,34 @@ export const TokenStorage = (() => {
     return true;
   };
 
-  const getToken = (): string | null => {
+  const getAuthData = (): AuthData | null => {
     if (!isTokenValid()) {
       return null;
     }
-    return accessToken;
-  };
-
-  const getRefreshToken = (): string | null => {
-    loadFromStorage(); // 항상 최신 상태 확인
-    return refreshToken;
+    return {
+      accessToken,
+      refreshToken,
+      expiresAt: expiresAt ? expiresAt.valueOf() : 0,
+      user,
+    };
   };
 
   const getAuthHeader = (): string | null => {
-    const token = getToken();
-    if (!token) {
+    const authData = getAuthData();
+    if (!authData) {
       return null;
     }
-    return `${tokenType} ${token}`;
-  };
 
-  // 브라우저에서만 초기 로드 수행
-  if (isBrowser()) {
-    loadFromStorage();
-  }
+    const { accessToken } = authData;
+    return `${tokenType} ${accessToken}`;
+  };
 
   return {
     setToken,
     clearToken,
     isTokenValid,
-    getToken,
-    getRefreshToken,
+    getAuthData,
     getAuthHeader,
+    loadFromStorage,
   };
 })();

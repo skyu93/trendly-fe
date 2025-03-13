@@ -1,12 +1,17 @@
 import { create } from 'zustand/react';
 import { AuthAction, AuthState } from '@/hooks/auth/auth.type';
 import AuthService from '@/services/auth/authService';
+import { UserInfo } from '@/services/user/user.type';
+import { isNil } from 'es-toolkit/compat';
 
 export const useAuth = create<AuthState & AuthAction>(set => {
   const authService = new AuthService();
   return {
     user: null,
     isLoading: false,
+    setUser(user: UserInfo | null) {
+      set({ user });
+    },
     isAuthenticated() {
       return authService.isAuthenticated();
     },
@@ -27,5 +32,14 @@ export const useAuth = create<AuthState & AuthAction>(set => {
       set({ user: null });
     },
     setLoading: loading => set({ isLoading: loading }),
+    renewAuth: () => {
+      const authData = authService.getAuthData();
+      if (isNil(authData)) {
+        return false;
+      }
+      const { user } = authData;
+      set({ user });
+      return true;
+    },
   };
 });

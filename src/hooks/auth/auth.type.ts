@@ -6,9 +6,11 @@ export interface AuthState {
 }
 
 export interface AuthAction {
+  setUser(user: UserInfo | null): void;
   isAuthenticated(): boolean;
   getLoginPageUrl(): string;
   getToken(code: string): Promise<void>;
   logout(): void;
   setLoading(loading: boolean): void;
+  renewAuth(): boolean;
 }

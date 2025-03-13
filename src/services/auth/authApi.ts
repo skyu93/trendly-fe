@@ -5,7 +5,9 @@ import Api from '@/services/httpClient';
 export class AuthApi {
   static login = async (queryParams: LoginRequestQueryParams): Promise<AuthResponse> => {
     const { code, redirectUri } = queryParams;
-    const { data } = await Api.get<AuthResponse>(`${API_PATH.LOGIN}?code=${code}&redirect_uri=${redirectUri}`);
+    const { data } = await Api.get<AuthResponse>(`${API_PATH.LOGIN}?code=${code}&redirect_uri=${redirectUri}`, {
+      headers: { skipAuth: true },
+    });
     return data;
   };
 
