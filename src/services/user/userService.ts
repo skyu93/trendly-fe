@@ -1,17 +1,21 @@
 import { UserInfo, UserUpdateRequest } from '@/services/user/user.type';
 import { UserApi } from '@/services/user/userApi';
-import { includes, isNil } from 'es-toolkit/compat';
-import { ApiError } from '@/services/apiError';
-import { ERROR_CODES } from '@/constants/errorCodes';
+import { isEmpty } from 'es-toolkit/compat';
 
 class UserService {
   constructor() {}
+
+  public async getUserInfo(): Promise<UserInfo> {
+    return await UserApi.getUserInfo();
+  }
+
   public async update(params: UserUpdateRequest): Promise<UserInfo> {
-    const { gender, birthdate } = params;
-    if (!includes(['MALE', 'FEMALE'], gender) || isNil(birthdate)) {
-      throw new ApiError({ code: ERROR_CODES.INVALID_FORMAT });
-    }
-    return await UserApi.updateUser(params);
+    const { gender, birthdate, marketingOpt } = params;
+    return await UserApi.updateUser({
+      gender,
+      birthdate: isEmpty(birthdate) ? null : birthdate,
+      marketingOpt,
+    });
   }
 
   public async delete(params: UserUpdateRequest): Promise<UserInfo> {
