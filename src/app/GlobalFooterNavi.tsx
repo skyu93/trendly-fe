@@ -28,7 +28,7 @@ function Navigation() {
   return (
     <nav
       id="nav"
-      className="fixed bottom-0 h-[var(--footer-height)] w-full max-w-[420px] bg-greyscale-80 flex items-center justify-between z-[10000]"
+      className="fixed bottom-0 h-[var(--footer-height)] w-full max-w-[420px] bg-greyscale-80 flex items-center justify-between z-40"
     >
       <Link href={ROUTE_PATH.KEYWORDS} className="flex-1 h-full flex flex-col items-center justify-center gap-1">
         <SvgIcon id="logo" color={isCurrentPage(ROUTE_PATH.KEYWORDS) ? 'primary' : 'greyscale-40'} />

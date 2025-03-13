@@ -7,6 +7,7 @@ import { Splash } from '@/components/Splash';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
 import { ApiError } from '@/services/apiError';
 import { ERROR_CODES } from '@/constants/errorCodes';
+import { useMarketingConsent } from '@/hooks/useMarketingConsent';
 
 const splashDelay = () => new Promise<void>(resolve => setTimeout(resolve, 3000));
 
@@ -15,7 +16,7 @@ export default function KakaoCallback() {
   const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const { handleError } = useErrorHandler();
-
+  const { setOpen } = useMarketingConsent();
   useEffect(() => {
     const handleKakaoCallback = async () => {
       const code = searchParams.get('code');
@@ -29,7 +30,8 @@ export default function KakaoCallback() {
       }
 
       try {
-        await Promise.all([getToken(code), splashDelay()]);
+        const [res] = await Promise.all([getToken(code), splashDelay()]);
+        setOpen(!!res.isNewUser);
         router.push(ROUTE_PATH.KEYWORDS);
       } catch (error) {
         handleError(

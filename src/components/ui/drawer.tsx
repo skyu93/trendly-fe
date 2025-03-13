@@ -2,47 +2,96 @@
 
 import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
-
+import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 
-const Drawer = ({ shouldScaleBackground = true, ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
-);
+// Context 생성
+interface DrawerContextProps {
+  containerSelector?: string;
+}
+
+const DrawerContext = React.createContext<DrawerContextProps>({
+  containerSelector: undefined,
+});
+
+// Context Hook
+const useDrawerContext = () => React.useContext(DrawerContext);
+
+// Drawer 루트 컴포넌트 수정 - fadeFromIndex 속성 추가 처리
+type DrawerProps = React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Root> & {
+  containerSelector?: string;
+};
+
+const Drawer = ({ shouldScaleBackground = true, containerSelector = '#main', ...props }: DrawerProps) => {
+  return (
+    <DrawerContext.Provider value={{ containerSelector }}>
+      <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
+    </DrawerContext.Provider>
+  );
+};
 Drawer.displayName = 'Drawer';
 
 const DrawerTrigger = DrawerPrimitive.Trigger;
 
-const DrawerPortal = DrawerPrimitive.Portal;
+// 포털 컴포넌트 수정
+const DrawerPortal = (props: React.ComponentProps<typeof DrawerPrimitive.Portal>) => {
+  const { containerSelector } = useDrawerContext();
+  const [container, setContainer] = React.useState<HTMLElement | null>(null);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (containerSelector) {
+      const element = document.querySelector(containerSelector) as HTMLElement;
+      if (element) {
+        setContainer(element);
+      }
+    }
+  }, [containerSelector]);
+
+  // 컨테이너가 있으면 createPortal 사용, 없으면 기본 Portal 사용
+  return container ? createPortal(props.children, container) : <DrawerPrimitive.Portal {...props} />;
+};
+DrawerPortal.displayName = 'DrawerPortal';
 
 const DrawerClose = DrawerPrimitive.Close;
 
+// 오버레이 컴포넌트 수정
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
->(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Overlay ref={ref} className={cn('fixed inset-0 z-50 bg-black/80', className)} {...props} />
-));
+>(({ className, ...props }, ref) => {
+  const { containerSelector } = useDrawerContext();
+
+  // container가 있으면 fixed 대신 absolute 사용하고 위치 조정
+  const overlayStyles = containerSelector ? 'absolute inset-0 z-40 bg-black/80' : 'fixed inset-0 z-40 bg-black/80';
+
+  return <DrawerPrimitive.Overlay ref={ref} className={cn(overlayStyles, className)} {...props} />;
+});
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
+// 컨텐츠 컴포넌트 수정
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerPrimitive.Content
-      ref={ref}
-      className={cn(
-        'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background',
-        className,
-      )}
-      {...props}
-    >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
-      {children}
-    </DrawerPrimitive.Content>
-  </DrawerPortal>
-));
+>(({ className, children, ...props }, ref) => {
+  const { containerSelector } = useDrawerContext();
+
+  // container가 있으면 fixed 대신 absolute 사용하고 위치 조정
+  const contentStyles = containerSelector
+    ? 'absolute bottom-0 left-0 right-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background'
+    : 'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background';
+
+  return (
+    <DrawerPortal>
+      <DrawerOverlay />
+      <DrawerPrimitive.Content ref={ref} className={cn(contentStyles, className)} {...props}>
+        {/*<div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />*/}
+        {children}
+      </DrawerPrimitive.Content>
+    </DrawerPortal>
+  );
+});
 DrawerContent.displayName = 'DrawerContent';
 
 const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
