@@ -3,8 +3,19 @@ import { TokenStorage } from '@/services/tokenStorage';
 import { ApiError } from '@/services/apiError';
 import { ERROR_CODES } from '@/constants/errorCodes';
 
+const getBaseUrl = () => {
+  switch (process.env.NODE_ENV) {
+    case 'production':
+      return 'https://trendly.kr';
+    case 'development':
+      return 'http://54.180.63.180:8080';
+    default:
+      return 'http://54.180.63.180:8080';
+  }
+};
+
 const Api: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
@@ -14,6 +25,7 @@ const Api: AxiosInstance = axios.create({
 Api.interceptors.request.use(
   config => {
     const authorization = TokenStorage.getAuthHeader();
+
     if (authorization && !config.headers?.skipAuth) {
       config.headers.Authorization = authorization;
     }
