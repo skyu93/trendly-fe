@@ -1,3 +1,5 @@
+'use client';
+
 import SvgIcon from '@/components/icon/SvgIcon';
 import {
   AlertDialog,
@@ -19,6 +21,8 @@ import { ROUTE_PATH } from '@/constants/route';
 interface Props {
   rank: number;
   keyword: string;
+  activeRank: number;
+  setIsHovered: (isHovered: boolean) => void;
 }
 
 function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean) => void }) {
@@ -48,22 +52,43 @@ function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean)
   );
 }
 
-export default function KeywordRankCard({ rank, keyword }: Props) {
+export default function KeywordRankCard({ rank, keyword, activeRank, setIsHovered }: Props) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
+  const isActive = activeRank === rank;
+
   return (
     <>
-      <div className="group flex items-center justify-between px-3 h-[67px] rounded-lg hover:bg-greyscale-20">
+      <div
+        className={`group flex items-center justify-between px-3 h-[67px] rounded-lg 
+                   ${isActive ? 'bg-greyscale-20' : ''}
+                   hover:bg-greyscale-20`}
+        onMouseEnter={() => {
+          setIsHovered(true);
+        }}
+        onMouseLeave={() => {
+          setIsHovered(false);
+        }}
+      >
         <div className="flex items-center">
-          <div className="w-6 h-6 rounded-full bg-greyscale-80 text-greyscale-10 font-bold flex items-center justify-center group-hover:bg-greyscale-10 group-hover:text-greyscale-90">
+          <div
+            className={`w-6 h-6 rounded-full 
+                         ${isActive ? 'bg-greyscale-10 text-greyscale-90' : 'bg-greyscale-80 text-greyscale-10'} 
+                         font-bold flex items-center justify-center 
+                         group-hover:bg-greyscale-10 group-hover:text-greyscale-90`}
+          >
             {rank}
           </div>
-          <span className="ml-[6px] group-hover:text-greyscale-90">{keyword}</span>
+          <span className={`ml-[6px] ${isActive ? 'text-greyscale-90' : ''} group-hover:text-greyscale-90`}>
+            {keyword}
+          </span>
         </div>
         <Button
           onClick={() => setShowDialog(true)}
           variant="outline"
-          className="py-2 px-3 border-greyscale-80 bg-greyscale-90 text-greyscale-20 group-hover:text-primary-60"
+          className={`py-2 px-3 border-greyscale-80 bg-greyscale-90 
+                     ${isActive ? 'text-primary-60' : 'text-greyscale-20'} 
+                     group-hover:text-primary-60`}
         >
           <span>채팅하기</span>
           <SvgIcon id="add-chat" />

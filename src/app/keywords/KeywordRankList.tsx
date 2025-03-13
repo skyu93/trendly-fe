@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import KeywordRankCard from '@/app/keywords/keywordRankCard';
@@ -15,6 +18,37 @@ interface Props {
 }
 export default function KeywordRankList({ title, list }: Props) {
   const router = useRouter();
+  const [activeRank, setActiveRank] = useState<number>(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalTime = 1500;
+  useEffect(() => {
+    if (!isHovered) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+
+      intervalRef.current = setInterval(() => {
+        setActiveRank(prevIndex => {
+          if (prevIndex === null) {
+            return 0;
+          }
+          return (prevIndex % list.length) + 1;
+        });
+      }, intervalTime);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isHovered, list, intervalTime, intervalRef.current]);
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -35,7 +69,7 @@ export default function KeywordRankList({ title, list }: Props) {
       <ScrollArea className="flex-1">
         {map(list, ({ rank, keyword }) => (
           <div key={keyword}>
-            <KeywordRankCard rank={rank} keyword={keyword} />
+            <KeywordRankCard rank={rank} keyword={keyword} activeRank={activeRank} setIsHovered={setIsHovered} />
             <Separator className="bg-greyscale-80" />
           </div>
         ))}

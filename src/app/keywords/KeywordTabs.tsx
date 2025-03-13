@@ -1,4 +1,5 @@
 'use client';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { map } from 'es-toolkit/compat';
 import KeywordRankList from '@/app/keywords/KeywordRankList';
