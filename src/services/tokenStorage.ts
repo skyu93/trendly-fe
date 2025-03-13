@@ -97,7 +97,9 @@ export const TokenStorage = (() => {
   };
 
   const isTokenValid = (): boolean => {
-    if (!accessToken) return false;
+    if (!accessToken) {
+      return false;
+    }
 
     if (expiresAt && dayjs().isAfter(expiresAt)) {
       // 만료된 토큰은 자동으로 제거하지 않고 refresh 시도 가능하도록 함

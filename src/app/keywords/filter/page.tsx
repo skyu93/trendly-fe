@@ -12,7 +12,7 @@ export default function FilterPage() {
   const { filterPeriod, setFilterPeriod, monthly, setMonthly, weekly, setWeekly, daily, setDaily } =
     useKeywordRankFilter();
   return (
-    <Accordion type="single" className="w-full" value={filterPeriod} onValueChange={setFilterPeriod}>
+    <Accordion type="single" className="w-full page-container" value={filterPeriod} onValueChange={setFilterPeriod}>
       <AccordionItem value="realtime" className="px-4">
         <AccordionTrigger>실시간</AccordionTrigger>
       </AccordionItem>

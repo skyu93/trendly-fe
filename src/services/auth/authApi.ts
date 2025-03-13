@@ -20,7 +20,7 @@ export class AuthApi {
           user: {
             id: 1,
             email: 'test@trendly.com',
-            birthDate: '2025-01-01',
+            birthDate: null,
             gender: null,
             marketingOpt: false,
             createDate: '2025-03-06T01:09:10.2999019',

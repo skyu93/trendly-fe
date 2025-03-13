@@ -44,7 +44,7 @@ export default function KakaoCallback() {
     };
 
     handleKakaoCallback();
-  }, [router, searchParams, getToken, handleError]);
+  }, [router, searchParams, getToken, handleError, setOpen]);
 
   return <Splash />;
 }

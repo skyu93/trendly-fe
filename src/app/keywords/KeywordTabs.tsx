@@ -12,7 +12,6 @@ const TAB_LIST = [
   { label: '검색엔진', value: 'searchEngine' },
   { label: '트위터', value: 'twitter' },
   { label: '인스타', value: 'instar' },
-  { label: '스레드', value: 'threads' },
 ] as const;
 
 type TabValue = (typeof TAB_LIST)[number]['value'];
@@ -57,7 +56,7 @@ export default function KeywordTabs() {
         className={`px-4 ${isAuthenticated() ? 'page-container' : 'pt-[var(--header-height)] h-screen'}`}
         onValueChange={v => setCurrentTab(v as TabValue)}
       >
-        <TabsList className="grid grid-cols-4">
+        <TabsList className={`grid grid-cols-${TAB_LIST.length}`}>
           {map(TAB_LIST, ({ label, value }) => {
             return (
               <TabsTrigger key={value} value={value}>
@@ -69,7 +68,15 @@ export default function KeywordTabs() {
         {map(TAB_LIST, ({ value }) => {
           return (
             <TabsContent key={value} value={value} className="w-full h-[calc(100%-36px)]">
-              <KeywordRankList title={contentsTitle} list={ranks} />
+              {ranks.length > 0 ? (
+                <KeywordRankList title={contentsTitle} list={ranks} />
+              ) : (
+                <div className="absolute inset-0 m-auto w-fit h-fit">
+                  <div className="flex flex-col items-center justify-center text-greyscale-40">
+                    <span className="text-xs">키워드 순위가 존재하지 않습니다.</span>
+                  </div>
+                </div>
+              )}
             </TabsContent>
           );
         })}

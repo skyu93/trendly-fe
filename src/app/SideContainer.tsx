@@ -17,7 +17,7 @@ export default function SideContainer() {
 
         <div>
           <h2 className="text-6xl font-bold text-white leading-tight whitespace-nowrap">
-            당신이 생각이
+            당신의 생각이
             <br />
             트렌드가 되는 순간
           </h2>
