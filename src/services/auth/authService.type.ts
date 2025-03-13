@@ -6,6 +6,7 @@ export interface AuthResponse {
   accessTokenExpiresIn: number;
   refreshTokenExpiresIn: number;
   tokenType: string;
+  newUser: boolean;
   user: UserInfo;
 }
 

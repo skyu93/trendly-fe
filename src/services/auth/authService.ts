@@ -20,9 +20,9 @@ class AuthService {
     return `${baseUrl}/auth`;
   }
 
-  public async login(code: string): Promise<UserInfo> {
+  public async login(code: string): Promise<{ isNewUser: boolean; user: UserInfo }> {
     try {
-      const { accessToken, refreshToken, accessTokenExpiresIn, user } = await AuthApi.login({
+      const { accessToken, refreshToken, accessTokenExpiresIn, user, newUser } = await AuthApi.login({
         code,
         redirectUri: this.getRedirectUri(),
       });
@@ -34,7 +34,7 @@ class AuthService {
         user,
       });
 
-      return user;
+      return { isNewUser: newUser, user };
     } catch (error) {
       throw new ApiError({
         code: ERROR_CODES.LOGIN_FAILED,

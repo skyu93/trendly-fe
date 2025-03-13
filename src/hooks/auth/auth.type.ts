@@ -9,7 +9,7 @@ export interface AuthAction {
   setUser(user: UserInfo | null): void;
   isAuthenticated(): boolean;
   getLoginPageUrl(): string;
-  getToken(code: string): Promise<void>;
+  getToken(code: string): Promise<{ isNewUser?: boolean }>;
   logout(): void;
   setLoading(loading: boolean): void;
   renewAuth(): boolean;

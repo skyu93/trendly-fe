@@ -18,11 +18,12 @@ export const useAuth = create<AuthState & AuthAction>(set => {
     getLoginPageUrl(): string {
       return authService.getLoginPageUrl();
     },
-    getToken: async (code: string): Promise<void> => {
+    getToken: async (code: string): Promise<{ isNewUser?: boolean }> => {
       set({ isLoading: true });
       try {
-        const user = await authService.login(code);
+        const { isNewUser, user } = await authService.login(code);
         set({ isLoading: false, user });
+        return { isNewUser };
       } finally {
         set({ isLoading: false });
       }
