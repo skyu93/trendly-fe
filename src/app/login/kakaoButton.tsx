@@ -12,14 +12,12 @@ interface Props {
 }
 
 export default function KakaoButton({ className }: Props) {
-  const { renewAuth } = useAuth();
+  const { renewAuth, getLoginPageUrl } = useAuth();
   const { handleError } = useErrorHandler();
   const router = useRouter();
   const handleLogin = () => {
     try {
-      // TODO: 테스트 코드
-      //window.location.href = getLoginPageUrl();
-      router.push('/auth?code=test');
+      window.location.href = getLoginPageUrl();
     } catch (error) {
       handleError(error);
     }

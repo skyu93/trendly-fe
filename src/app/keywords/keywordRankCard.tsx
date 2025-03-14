@@ -21,8 +21,9 @@ import { ROUTE_PATH } from '@/constants/route';
 interface Props {
   rank: number;
   keyword: string;
-  activeRank: number;
-  setIsHovered: (isHovered: boolean) => void;
+  activeIndex: number;
+  handleMouseEnter: () => void;
+  handleMouseLeave: () => void;
 }
 
 function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean) => void }) {
@@ -52,10 +53,10 @@ function ChatDialog({ open, onClose }: { open: boolean; onClose: (open: boolean)
   );
 }
 
-export default function KeywordRankCard({ rank, keyword, activeRank, setIsHovered }: Props) {
+export default function KeywordRankCard({ rank, keyword, activeIndex, handleMouseEnter, handleMouseLeave }: Props) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
-  const isActive = activeRank === rank;
+  const isActive = activeIndex === rank;
 
   return (
     <>
@@ -63,12 +64,8 @@ export default function KeywordRankCard({ rank, keyword, activeRank, setIsHovere
         className={`group flex items-center justify-between px-3 h-[67px] rounded-lg 
                    ${isActive ? 'bg-greyscale-20' : ''}
                    hover:bg-greyscale-20`}
-        onMouseEnter={() => {
-          setIsHovered(true);
-        }}
-        onMouseLeave={() => {
-          setIsHovered(false);
-        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className="flex items-center">
           <div
