@@ -4,7 +4,7 @@ import { ApiError } from '@/services/apiError';
 import { ERROR_CODES } from '@/constants/errorCodes';
 
 const getBaseUrl = () => {
-  switch (process.env.NODE_ENV) {
+  switch (process.env.NEXT_PUBLIC_ENV) {
     case 'production':
       return 'https://trendly.kr';
     case 'development':
