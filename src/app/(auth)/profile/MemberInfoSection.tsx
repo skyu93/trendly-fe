@@ -29,8 +29,8 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
     const saveUser = async () => {
       try {
         const user = await userService.update({
-          gender: gender ?? undefined,
-          birthdate: dayjs(birthdate, 'YYYYMMDD').format('YYYY-MM-DD'),
+          gender,
+          birthdate: birthdate ? dayjs(birthdate, 'YYYYMMDD').format('YYYY-MM-DD') : birthdate,
         });
         if (user) {
           setUser(user);
@@ -80,16 +80,16 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
                   onValueChange={(value: Gender) => setGender(value)}
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="MALE" id="MALE" />
-                    <Label htmlFor="MALE">남성</Label>
+                    <RadioGroupItem value="male" id="male" />
+                    <Label htmlFor="male">남성</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="FEMALE" id="FEMALE" />
-                    <Label htmlFor="FEMALE">여성</Label>
+                    <RadioGroupItem value="female" id="female" />
+                    <Label htmlFor="female">여성</Label>
                   </div>
                 </RadioGroup>
               ) : (
-                <div className="text-greyscale-10">{gender ? (gender === 'MALE' ? '남성' : '여성') : '미선택'}</div>
+                <div className="text-greyscale-10">{gender ? (gender === 'male' ? '남성' : '여성') : '미선택'}</div>
               )}
             </div>
             <Separator className="bg-greyscale-80 my-3" />

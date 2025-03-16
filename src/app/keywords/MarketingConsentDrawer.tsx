@@ -10,11 +10,31 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button/Button';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useAuth } from '@/hooks/auth/useAuth';
+import UserService from '@/services/user/userService';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 export default function MarketingConsentDrawer() {
   const { isOpen, setOpen } = useMarketingConsent();
-  const handleClose = useCallback(() => setOpen(false), [setOpen]);
+  const { handleError } = useErrorHandler();
+  const { setUser } = useAuth();
+  const userService = useMemo(() => new UserService(), []);
+  const handleClose = useCallback(
+    async (agree: boolean) => {
+      setOpen(false);
+      if (agree) {
+        try {
+          const user = await userService.update({ marketingOpt: agree });
+          setUser(user);
+        } catch (error) {
+          handleError(error);
+        }
+      }
+    },
+    [setOpen, setUser, userService, handleError],
+  );
+
   return (
     <Drawer open={isOpen}>
       <DrawerContent className="bg-dark-02 z-40">
@@ -37,10 +57,10 @@ export default function MarketingConsentDrawer() {
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
-          <Button variant="tertiary" onClick={handleClose}>
+          <Button variant="tertiary" onClick={() => handleClose(true)}>
             네, 동의할게요
           </Button>
-          <Button variant="outline" onClick={handleClose}>
+          <Button variant="outline" onClick={() => handleClose(false)}>
             다음에 받을게요
           </Button>
         </DrawerFooter>

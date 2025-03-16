@@ -1,6 +1,6 @@
 import { UserInfo, UserUpdateRequest } from '@/services/user/user.type';
 import { UserApi } from '@/services/user/userApi';
-import { isEmpty } from 'es-toolkit/compat';
+import { omitBy } from 'es-toolkit/compat';
 
 class UserService {
   constructor() {}
@@ -10,16 +10,14 @@ class UserService {
   }
 
   public async update(params: UserUpdateRequest): Promise<UserInfo> {
-    const { gender, birthdate, marketingOpt } = params;
+    const isUndefinedOrEmptyString = (v?: string | boolean | null) => v === undefined || v === '';
     return await UserApi.updateUser({
-      gender,
-      birthdate: isEmpty(birthdate) ? null : birthdate,
-      marketingOpt,
+      ...omitBy(params, isUndefinedOrEmptyString),
     });
   }
 
-  public async delete(params: UserUpdateRequest): Promise<UserInfo> {
-    return await UserApi.updateUser(params);
+  public async delete(): Promise<{ message: string }> {
+    return await UserApi.deleteUser();
   }
 }
 
