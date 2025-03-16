@@ -39,7 +39,6 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
           console.error(error);
           break;
       }
-      console.error(error.message);
     } else if (error) {
       console.error(error);
     }

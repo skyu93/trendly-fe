@@ -3,7 +3,7 @@ import { Union } from '@/helper/type';
 export const ERROR_CODES = {
   TOKEN_INVALID: 'EAU001', // 유효하지 않은 토큰
   LOGIN_FAILED: 'EAU002', // 로그인 실패
-  FORBIDDEN: 'EAU003', // 로그인 실패
+  FORBIDDEN: 'EAU003',
 
   REQUIRED_FIELD: 'EVA001', // 필수 필드 누락
   INVALID_FORMAT: 'EVA002', // 잘못된 데이터 형식
