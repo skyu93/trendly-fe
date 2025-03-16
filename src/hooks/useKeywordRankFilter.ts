@@ -32,6 +32,7 @@ interface KeywordRankFilterAction {
   setMonthly(filter: FilterMonthly): void;
   setWeekly(filter: FilterWeekly): void;
   setDaily(filter: FilterDaily): void;
+  init(): void;
 }
 export const useKeywordRankFilter = create<KeywordRankFilterState & KeywordRankFilterAction>(set => {
   const now = dayjs();
@@ -74,6 +75,25 @@ export const useKeywordRankFilter = create<KeywordRankFilterState & KeywordRankF
     },
     setDaily: (filter: FilterDaily) => {
       set({ daily: { ...filter } });
+    },
+    init() {
+      set({
+        filterPeriod: 'realtime',
+        weekly: {
+          year: now.format('YYYY'),
+          month: now.format('MM'),
+          week: getWeekOfMonth(),
+        },
+        daily: {
+          year: now.format('YYYY'),
+          month: now.format('MM'),
+          day: now.format('DD'),
+        },
+        monthly: {
+          year: now.format('YYYY'),
+          month: now.format('MM'),
+        },
+      });
     },
   };
 });

@@ -56,7 +56,7 @@ export default function KeywordTabs() {
         className={`px-4 ${isAuthenticated() ? 'page-container' : 'pt-[var(--header-height)] h-screen'}`}
         onValueChange={v => setCurrentTab(v as TabValue)}
       >
-        <TabsList className={`grid grid-cols-${TAB_LIST.length}`}>
+        <TabsList className={`grid grid-cols-3`}>
           {map(TAB_LIST, ({ label, value }) => {
             return (
               <TabsTrigger key={value} value={value}>
