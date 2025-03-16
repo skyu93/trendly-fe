@@ -27,7 +27,7 @@ export default function PreChatSetupDialog({ open, onClose }: Props) {
     if (open) {
       setAvatar(getRandomImage());
     }
-  }, [open]);
+  }, [open, getRandomImage]);
 
   const handleNickName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(event.target.value);

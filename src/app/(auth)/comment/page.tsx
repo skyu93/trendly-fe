@@ -15,7 +15,7 @@ export default function Main() {
   // 상태로 메시지 배열을 관리합니다.
   const [messages] = useState<Message[]>([
     // 테스트 데이터 - 필요시 빈 배열 []로 변경하세요
-    { id: 1, name: '등산하는 알파카 1111', text: '영차' },
+    { id: 1, name: '등산하는 알파카', text: '^^' },
     { id: 2, name: '지나가는 도마뱀', text: '엥 이게 왜 형이 주인공이라고 얘기하는 거야? 그냥 이해를 못 하신듯' },
   ]);
 

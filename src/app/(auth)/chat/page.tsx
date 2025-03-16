@@ -1,4 +1,5 @@
 import React from 'react';
+import ChatView from '@/app/(auth)/chat/ChatView';
 
 // 타입 정의
 // interface Reaction {
@@ -24,5 +25,5 @@ import React from 'react';
 // ];
 
 export default function ChatPage() {
-  return <div></div>;
+  return <ChatView />;
 }
