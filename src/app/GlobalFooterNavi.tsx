@@ -21,7 +21,7 @@ function Navigation() {
   const pathname = usePathname();
   const isCurrentPage = useCallback((path: RoutePath) => path === pathname, [pathname]);
 
-  if (!isAuthenticated()) {
+  if (!isAuthenticated() || pathname === ROUTE_PATH.KEYWORDS_FILTER) {
     return null;
   }
 
