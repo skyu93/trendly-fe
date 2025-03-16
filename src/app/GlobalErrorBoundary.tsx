@@ -58,11 +58,23 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
       <AlertDialog open={isError}>
         <AlertDialogContent className="w-[80%]">
           <AlertDialogHeader>
-            <AlertDialogTitle>Oops!</AlertDialogTitle>
-            <AlertDialogDescription className="flex flex-col items-center justify-center text-greyscale-30">
-              <span className="text-xs">문제가 발생했어요...</span>
-              <span className="text-xs">새로고침 하거나 다시 시도하면 괜찮아질 거예요!</span>
-            </AlertDialogDescription>
+            {error instanceof ApiError && error.code === ERROR_CODES.TOKEN_INVALID ? (
+              <>
+                <AlertDialogTitle>로그인 만료</AlertDialogTitle>
+                <AlertDialogDescription className="flex flex-col items-center justify-center text-greyscale-30">
+                  <span className="text-xs">자동으로 로그아웃 되었어요.</span>
+                  <span className="text-xs">다시 로그인해주세요</span>
+                </AlertDialogDescription>
+              </>
+            ) : (
+              <>
+                <AlertDialogTitle>Oops!</AlertDialogTitle>
+                <AlertDialogDescription className="flex flex-col items-center justify-center text-greyscale-30">
+                  <span className="text-xs">문제가 발생했어요...</span>
+                  <span className="text-xs">새로고침 하거나 다시 시도하면 괜찮아질 거예요!</span>
+                </AlertDialogDescription>
+              </>
+            )}
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction className="h-12" onClick={handleClearError}>
