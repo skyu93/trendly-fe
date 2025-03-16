@@ -1,6 +1,7 @@
 import { UserInfo, UserUpdateRequest } from '@/services/user/user.type';
 import { UserApi } from '@/services/user/userApi';
 import { omitBy } from 'es-toolkit/compat';
+import { TokenStorage } from '@/services/tokenStorage';
 
 class UserService {
   constructor() {}
@@ -16,8 +17,14 @@ class UserService {
     });
   }
 
-  public async delete(): Promise<{ message: string }> {
-    return await UserApi.deleteUser();
+  public async delete(): Promise<boolean> {
+    try {
+      await UserApi.deleteUser();
+      TokenStorage.clearToken();
+      return true;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

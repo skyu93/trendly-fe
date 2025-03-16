@@ -89,7 +89,7 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
                   </div>
                 </RadioGroup>
               ) : (
-                <div className="text-greyscale-10">{gender ? (gender === 'male' ? '남성' : '여성') : '미선택'}</div>
+                <div className="text-greyscale-10">{gender ? (gender === 'MALE' ? '남성' : '여성') : '미선택'}</div>
               )}
             </div>
             <Separator className="bg-greyscale-80 my-3" />

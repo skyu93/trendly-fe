@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { UserInfo } from '@/services/user/user.type';
 import UserService from '@/services/user/userService';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 interface Props {
   user: UserInfo;
@@ -15,11 +16,13 @@ export function MarketingSection({ user, isEditing }: Props) {
   const [checked, setChecked] = useState(user.marketingOpt);
   const userService = useMemo(() => new UserService(), []);
   const { handleError } = useErrorHandler();
+  const { setUser } = useAuth();
   const handleChange = async (checked: boolean) => {
     setChecked(checked);
 
     try {
-      await userService.update({ marketingOpt: checked });
+      const user = await userService.update({ marketingOpt: checked });
+      setUser(user);
     } catch (error) {
       setChecked(!checked); // 실패 시 상태 원복
       handleError(error);

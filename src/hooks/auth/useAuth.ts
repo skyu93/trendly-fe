@@ -1,4 +1,4 @@
-import { create } from 'zustand/react';
+import { create } from 'zustand';
 import { AuthAction, AuthState } from '@/hooks/auth/auth.type';
 import AuthService from '@/services/auth/authService';
 import { UserInfo } from '@/services/user/user.type';
@@ -10,6 +10,7 @@ export const useAuth = create<AuthState & AuthAction>(set => {
     user: null,
     isLoading: false,
     setUser(user: UserInfo | null) {
+      authService.updateUser(user);
       set({ user });
     },
     isAuthenticated() {

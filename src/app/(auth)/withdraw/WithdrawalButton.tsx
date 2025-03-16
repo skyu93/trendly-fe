@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,6 +13,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 import { Button } from '@/components/ui/button/Button';
+import UserService from '@/services/user/userService';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 interface Props {
   isAgreed: boolean;
@@ -22,15 +24,17 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
   const [showDialog, setShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const userService = useMemo(() => new UserService(), []);
+  const { handleError } = useErrorHandler();
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsLoading(true);
     setShowDialog(false);
     try {
-      // TODO: 유저 세션 정보 모두 삭제
+      await userService.delete();
       router.replace(ROUTE_PATH.LOGIN);
     } catch (error) {
-      console.error('탈퇴 처리 실패:', error);
+      handleError(error);
     } finally {
       setIsLoading(false);
     }
