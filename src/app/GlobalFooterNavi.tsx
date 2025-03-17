@@ -21,10 +21,6 @@ function Navigation() {
   const pathname = usePathname();
   const isCurrentPage = useCallback((path: RoutePath) => path === pathname, [pathname]);
 
-  if (!isAuthenticated() || pathname === ROUTE_PATH.KEYWORDS_FILTER) {
-    return null;
-  }
-
   return (
     <nav
       id="nav"
@@ -38,13 +34,19 @@ function Navigation() {
           홈
         </span>
       </Link>
-      <Link href={ROUTE_PATH.CHATS} className="flex-1 h-full flex flex-col items-center justify-center gap-1">
+      <Link
+        href={isAuthenticated() ? ROUTE_PATH.CHATS : ROUTE_PATH.LOGIN_INVITATION}
+        className="flex-1 h-full flex flex-col items-center justify-center gap-1"
+      >
         <MessageCircle className={isCurrentPage(ROUTE_PATH.CHATS) ? 'text-primary' : 'text-greyscale-40'} />
         <span className={`text-[10px] ${isCurrentPage(ROUTE_PATH.CHATS) ? 'text-greyscale-10' : 'text-greyscale-40'}`}>
           채팅목록
         </span>
       </Link>
-      <Link href={ROUTE_PATH.MY} className="flex-1 h-full flex flex-col items-center justify-center gap-1">
+      <Link
+        href={isAuthenticated() ? ROUTE_PATH.MY : ROUTE_PATH.LOGIN_INVITATION}
+        className="flex-1 h-full flex flex-col items-center justify-center gap-1"
+      >
         <SvgIcon id="user" color={isCurrentPage(ROUTE_PATH.MY) ? 'primary' : 'greyscale-40'} />
         <span className={`text-[10px] ${isCurrentPage(ROUTE_PATH.MY) ? 'text-greyscale-10' : 'text-greyscale-40'}`}>
           마이
