@@ -21,6 +21,10 @@ function Navigation() {
   const pathname = usePathname();
   const isCurrentPage = useCallback((path: RoutePath) => path === pathname, [pathname]);
 
+  if (pathname === ROUTE_PATH.KEYWORDS_FILTER) {
+    return null;
+  }
+
   return (
     <nav
       id="nav"
