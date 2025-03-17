@@ -11,6 +11,6 @@ export interface UserInfo {
 
 export interface UserUpdateRequest {
   gender?: Gender | null;
-  birthdate?: string | null;
+  birthDate?: string | null;
   marketingOpt?: boolean | null;
 }
