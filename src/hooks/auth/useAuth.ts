@@ -5,12 +5,13 @@ import { UserInfo } from '@/services/user/user.type';
 import { isNil } from 'es-toolkit/compat';
 import UserService from '@/services/user/userService';
 
-export const useAuth = create<AuthState & AuthAction>(set => {
+export const useAuth = create<AuthState & AuthAction>((set, get) => {
   const authService = new AuthService();
   const userService = new UserService();
   return {
     user: null,
     isLoading: false,
+    isLogout: false,
     setUser(user: UserInfo | null) {
       set({ user });
     },
@@ -24,7 +25,7 @@ export const useAuth = create<AuthState & AuthAction>(set => {
       set({ isLoading: true });
       try {
         const { isNewUser, user } = await authService.login(code);
-        set({ isLoading: false, user });
+        set({ isLoading: false, isLogout: false, user });
         return { isNewUser };
       } finally {
         set({ isLoading: false });
@@ -32,18 +33,20 @@ export const useAuth = create<AuthState & AuthAction>(set => {
     },
     logout: () => {
       authService.logout(); // 로그아웃 처리
-      set({ user: null });
+      set({ user: null, isLogout: true });
     },
     setLoading: loading => set({ isLoading: loading }),
     reloadAuthData: () => {
       const authData = authService.getAuthData();
-      if (isNil(authData)) {
+      const { user, isLogout } = get();
+      if (isNil(authData) || isLogout) {
         return false;
       }
-      userService.getUserInfo().then(user => {
-        set({ user });
-      });
-
+      if (isNil(user)) {
+        userService.getUserInfo().then(user => {
+          set({ user });
+        });
+      }
       return true;
     },
   };

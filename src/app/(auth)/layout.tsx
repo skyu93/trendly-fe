@@ -9,10 +9,14 @@ import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const { isAuthenticated, reloadAuthData, user } = useAuth();
+  const { isAuthenticated, reloadAuthData, user, isLogout } = useAuth();
   const { handleError } = useErrorHandler();
 
   useEffect(() => {
+    if (isLogout) {
+      setIsAuthorized(false);
+      return;
+    }
     if (!isAuthenticated() && user) {
       handleError(new ApiError({ code: ERROR_CODES.TOKEN_INVALID }));
       return;

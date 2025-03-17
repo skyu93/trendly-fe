@@ -3,6 +3,7 @@ import { UserInfo } from '@/services/user/user.type';
 export interface AuthState {
   user: UserInfo | null;
   isLoading: boolean;
+  isLogout: boolean;
 }
 
 export interface AuthAction {
