@@ -12,5 +12,5 @@ export interface AuthAction {
   getToken(code: string): Promise<{ isNewUser?: boolean }>;
   logout(): void;
   setLoading(loading: boolean): void;
-  renewAuth(): boolean;
+  reloadAuthData(): boolean;
 }

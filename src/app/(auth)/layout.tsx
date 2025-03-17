@@ -9,22 +9,20 @@ import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const { isAuthenticated, renewAuth } = useAuth();
+  const { isAuthenticated, reloadAuthData, user } = useAuth();
   const { handleError } = useErrorHandler();
 
   useEffect(() => {
-    if (!renewAuth()) {
-      handleError(new ApiError({ code: ERROR_CODES.FORBIDDEN }));
+    if (!isAuthenticated() && user) {
+      handleError(new ApiError({ code: ERROR_CODES.TOKEN_INVALID }));
+      return;
     }
-  }, [renewAuth, handleError]);
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
+    if (!reloadAuthData()) {
       handleError(new ApiError({ code: ERROR_CODES.FORBIDDEN }));
       return;
     }
     setIsAuthorized(true);
-  }, [isAuthenticated, handleError]);
+  }, [reloadAuthData, handleError, isAuthenticated, user]);
 
   // 인증 체크 중이거나 인증되지 않은 경우
   if (!isAuthorized) {

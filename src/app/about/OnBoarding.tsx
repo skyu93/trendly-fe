@@ -22,11 +22,11 @@ export default function OnBoarding() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
-  const { isAuthenticated, renewAuth } = useAuth();
+  const { isAuthenticated, reloadAuthData } = useAuth();
 
   useEffect(() => {
-    renewAuth();
-  }, [renewAuth]);
+    reloadAuthData();
+  }, [reloadAuthData]);
 
   useEffect(() => {
     const stepFromQuery = Number(searchParams.get('step')) || 1;

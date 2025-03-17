@@ -19,10 +19,10 @@ type TabValue = (typeof TAB_LIST)[number]['value'];
 export default function KeywordTabs() {
   const [currentTab, setCurrentTab] = useState<TabValue>('searchEngine');
   const { filterPeriod, monthly, weekly, daily } = useKeywordRankFilter();
-  const { isAuthenticated, renewAuth } = useAuth();
+  const { isAuthenticated, reloadAuthData } = useAuth();
   useEffect(() => {
-    renewAuth();
-  }, [renewAuth]);
+    reloadAuthData();
+  }, [reloadAuthData]);
 
   const ranks = useMemo(() => {
     return Array.from({ length: 10 }).map((_, i) => ({ rank: i + 1, keyword: `키워드 ${i}` }));

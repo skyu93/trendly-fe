@@ -3,6 +3,7 @@ import { TokenStorage } from '@/services/tokenStorage';
 import { ApiError } from '@/services/apiError';
 import { ERROR_CODES } from '@/constants/errorCodes';
 import { API_PATH } from '@/constants/apiPath';
+import { AuthResponse } from '@/services/auth/authService.type';
 
 const getBaseUrl = () => {
   switch (process.env.NEXT_PUBLIC_ENV) {
@@ -29,7 +30,7 @@ const refreshAccessToken = async (): Promise<string> => {
       throw new Error('리프레시 토큰이 없습니다.');
     }
 
-    const response = await Api.post(
+    const response = await Api.post<AuthResponse>(
       API_PATH.REFRESH_TOKEN,
       { refreshToken },
       {
@@ -37,14 +38,13 @@ const refreshAccessToken = async (): Promise<string> => {
       },
     );
 
-    const { accessToken, refreshToken: newRefreshToken, accessTokenExpiresIn, user } = response.data;
+    const { accessToken, refreshToken: newRefreshToken, refreshTokenExpiresIn } = response.data;
 
     // 새 토큰 저장
     TokenStorage.setToken({
       accessToken,
       refreshToken: newRefreshToken,
-      expiresAt: accessTokenExpiresIn,
-      user,
+      refreshExpiresAt: refreshTokenExpiresIn,
     });
 
     return accessToken;

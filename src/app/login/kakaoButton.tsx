@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function KakaoButton({ className }: Props) {
-  const { renewAuth, getLoginPageUrl } = useAuth();
+  const { reloadAuthData, getLoginPageUrl } = useAuth();
   const { handleError } = useErrorHandler();
   const router = useRouter();
   const handleLogin = () => {
@@ -24,10 +24,10 @@ export default function KakaoButton({ className }: Props) {
   };
 
   useEffect(() => {
-    if (renewAuth()) {
+    if (reloadAuthData()) {
       router.push(ROUTE_PATH.KEYWORDS);
     }
-  }, [router, renewAuth, handleError]);
+  }, [router, reloadAuthData, handleError]);
 
   return (
     <Button

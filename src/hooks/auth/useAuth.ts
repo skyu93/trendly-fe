@@ -3,14 +3,15 @@ import { AuthAction, AuthState } from '@/hooks/auth/auth.type';
 import AuthService from '@/services/auth/authService';
 import { UserInfo } from '@/services/user/user.type';
 import { isNil } from 'es-toolkit/compat';
+import UserService from '@/services/user/userService';
 
 export const useAuth = create<AuthState & AuthAction>(set => {
   const authService = new AuthService();
+  const userService = new UserService();
   return {
     user: null,
     isLoading: false,
     setUser(user: UserInfo | null) {
-      authService.updateUser(user);
       set({ user });
     },
     isAuthenticated() {
@@ -34,13 +35,15 @@ export const useAuth = create<AuthState & AuthAction>(set => {
       set({ user: null });
     },
     setLoading: loading => set({ isLoading: loading }),
-    renewAuth: () => {
+    reloadAuthData: () => {
       const authData = authService.getAuthData();
       if (isNil(authData)) {
         return false;
       }
-      const { user } = authData;
-      set({ user });
+      userService.getUserInfo().then(user => {
+        set({ user });
+      });
+
       return true;
     },
   };

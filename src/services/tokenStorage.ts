@@ -1,19 +1,17 @@
 import dayjs from 'dayjs';
-import { UserInfo } from '@/services/user/user.type';
 
 interface AuthData {
   accessToken: string | null;
   refreshToken: string | null;
-  expiresAt: number | null;
-  user: UserInfo | null;
+  refreshExpiresAt: number | null;
 }
 
 export const TokenStorage = (() => {
+  const LOCAL_STORAGE_KEY = 'trendly';
   const tokenType = 'Bearer';
   let accessToken: string | null = null;
   let refreshToken: string | null = null;
-  let expiresAt: dayjs.Dayjs | null = null;
-  let user: UserInfo | null = null;
+  let refreshExpiresAt: dayjs.Dayjs | null = null;
   let isInitialized = false;
 
   const encrypt = (data: string): string => {
@@ -34,17 +32,16 @@ export const TokenStorage = (() => {
   };
 
   const saveToStorage = (): void => {
-    if (!isBrowser() || !accessToken || !expiresAt) return;
+    if (!isBrowser() || !accessToken || !refreshExpiresAt) return;
 
     try {
       const authData = JSON.stringify({
         accessToken,
         refreshToken,
-        expiresAt: expiresAt ? expiresAt.valueOf() : 0,
-        user,
+        refreshExpiresAt: refreshExpiresAt ? refreshExpiresAt.valueOf() : 0,
       });
 
-      localStorage.setItem('trendly', encrypt(authData));
+      localStorage.setItem(LOCAL_STORAGE_KEY, encrypt(authData));
     } catch (error) {
       console.error(error);
     }
@@ -59,7 +56,7 @@ export const TokenStorage = (() => {
       isInitialized = true;
 
       try {
-        const encryptedData = localStorage.getItem('trendly');
+        const encryptedData = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (!encryptedData) {
           return;
         }
@@ -69,8 +66,10 @@ export const TokenStorage = (() => {
 
         accessToken = authData.accessToken || null;
         refreshToken = authData.refreshToken || null;
-        expiresAt = authData.expiresAt ? dayjs(authData.expiresAt) : null;
-        user = authData.user || null;
+        refreshExpiresAt = authData.refreshExpiresAt ? dayjs(authData.refreshExpiresAt) : null;
+        if (!isTokenValid()) {
+          clearToken();
+        }
       } catch (error) {
         console.error(error);
         clearToken();
@@ -81,18 +80,16 @@ export const TokenStorage = (() => {
   const setToken = (authData: AuthData): void => {
     accessToken = authData.accessToken;
     refreshToken = authData.refreshToken;
-    expiresAt = authData.expiresAt ? dayjs().add(authData.expiresAt, 'second') : null;
-    user = authData.user;
+    refreshExpiresAt = authData.refreshExpiresAt ? dayjs().add(authData.refreshExpiresAt, 'second') : null;
     saveToStorage();
   };
 
   const clearToken = (): void => {
     accessToken = null;
     refreshToken = null;
-    expiresAt = null;
-    user = null;
+    refreshExpiresAt = null;
     if (isBrowser()) {
-      localStorage.removeItem('trendly');
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
     }
   };
 
@@ -101,8 +98,7 @@ export const TokenStorage = (() => {
       return false;
     }
 
-    if (expiresAt && dayjs().isAfter(expiresAt)) {
-      // 만료된 토큰은 자동으로 제거하지 않고 refresh 시도 가능하도록 함
+    if (refreshExpiresAt && dayjs().isAfter(refreshExpiresAt)) {
       return false;
     }
 
@@ -116,8 +112,7 @@ export const TokenStorage = (() => {
     return {
       accessToken,
       refreshToken,
-      expiresAt: expiresAt ? expiresAt.valueOf() : 0,
-      user,
+      refreshExpiresAt: refreshExpiresAt ? refreshExpiresAt.valueOf() : 0,
     };
   };
 

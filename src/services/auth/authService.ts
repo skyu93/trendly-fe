@@ -3,7 +3,6 @@ import { AuthApi } from '@/services/auth/authApi';
 import { TokenStorage } from '@/services/tokenStorage';
 import { ApiError } from '@/services/apiError';
 import { ERROR_CODES } from '@/constants/errorCodes';
-import { isNil } from 'es-toolkit/compat';
 
 class AuthService {
   private readonly KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize';
@@ -23,7 +22,7 @@ class AuthService {
 
   public async login(code: string): Promise<{ isNewUser: boolean; user: UserInfo }> {
     try {
-      const { accessToken, refreshToken, accessTokenExpiresIn, user, newUser } = await AuthApi.login({
+      const { accessToken, refreshToken, refreshTokenExpiresIn, user, newUser } = await AuthApi.login({
         code,
         redirectUri: this.getRedirectUri(),
       });
@@ -31,8 +30,7 @@ class AuthService {
       TokenStorage.setToken({
         accessToken,
         refreshToken,
-        expiresAt: accessTokenExpiresIn,
-        user,
+        refreshExpiresAt: refreshTokenExpiresIn,
       });
 
       return { isNewUser: newUser, user };
@@ -56,17 +54,6 @@ class AuthService {
   public getAuthData() {
     TokenStorage.loadFromStorage();
     return TokenStorage.getAuthData();
-  }
-
-  public updateUser(user: UserInfo | null) {
-    const autData = this.getAuthData();
-    if (isNil(autData)) {
-      return;
-    }
-    TokenStorage.setToken({
-      ...autData,
-      user,
-    });
   }
 }
 
