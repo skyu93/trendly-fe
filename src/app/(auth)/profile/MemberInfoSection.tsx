@@ -80,12 +80,12 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
                   onValueChange={(value: Gender) => setGender(value)}
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="male" id="male" />
-                    <Label htmlFor="male">남성</Label>
+                    <RadioGroupItem value="MALE" id="male" />
+                    <Label htmlFor="MALE">남성</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="female" id="female" />
-                    <Label htmlFor="female">여성</Label>
+                    <RadioGroupItem value="FEMALE" id="female" />
+                    <Label htmlFor="FEMALE">여성</Label>
                   </div>
                 </RadioGroup>
               ) : (
