@@ -1,38 +1,53 @@
-import { create } from 'zustand/react';
-import { AuthState } from '@/types/auth.type';
+import { create } from 'zustand';
+import { AuthAction, AuthState } from '@/hooks/auth/auth.type';
+import AuthService from '@/services/auth/authService';
+import { UserInfo } from '@/services/user/user.type';
+import { isNil } from 'es-toolkit/compat';
+import UserService from '@/services/user/userService';
 
-const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize';
-const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI ?? '';
-const CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID ?? '';
-
-export const useAuth = create<AuthState>(set => ({
-  isLoading: false,
-  error: null,
-  getAuthUrl: (() => {
-    const params = new URLSearchParams({
-      client_id: CLIENT_ID,
-      redirect_uri: REDIRECT_URI,
-      response_type: 'code',
-    });
-    return `${KAKAO_AUTH_URL}?${params.toString()}`;
-  })(),
-  getToken: async (code: string): Promise<string> => {
-    set({ isLoading: true, error: null });
-    try {
-      const token = `Bearer TOKEN ${code}`;
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(token);
-        }, 1000);
-      });
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('알 수 없는 오류가 발생했습니다.');
-      set({ error });
-      throw error;
-    } finally {
-      set({ isLoading: false });
-    }
-  },
-  setLoading: loading => set({ isLoading: loading }),
-  setError: error => set({ error }),
-}));
+export const useAuth = create<AuthState & AuthAction>((set, get) => {
+  const authService = new AuthService();
+  const userService = new UserService();
+  return {
+    user: null,
+    isLoading: false,
+    isLogout: false,
+    setUser(user: UserInfo | null) {
+      set({ user });
+    },
+    isAuthenticated() {
+      return authService.isAuthenticated();
+    },
+    getLoginPageUrl(): string {
+      return authService.getLoginPageUrl();
+    },
+    getToken: async (code: string): Promise<{ isNewUser?: boolean }> => {
+      set({ isLoading: true });
+      try {
+        const { isNewUser, user } = await authService.login(code);
+        set({ isLoading: false, isLogout: false, user });
+        return { isNewUser };
+      } finally {
+        set({ isLoading: false });
+      }
+    },
+    logout: () => {
+      authService.logout(); // 로그아웃 처리
+      set({ user: null, isLogout: true });
+    },
+    setLoading: loading => set({ isLoading: loading }),
+    reloadAuthData: () => {
+      const authData = authService.getAuthData();
+      const { user, isLogout } = get();
+      if (isNil(authData) || isLogout) {
+        return false;
+      }
+      if (isNil(user)) {
+        userService.getUserInfo().then(user => {
+          set({ user });
+        });
+      }
+      return true;
+    },
+  };
+});

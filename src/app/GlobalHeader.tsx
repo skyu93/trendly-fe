@@ -34,9 +34,7 @@ const Title: React.FC<TitleProps> = ({ children, className = '' }) => {
 
 const GlobalHeader: HeaderComponent = ({ children, className = '' }) => {
   return (
-    <header
-      className={`absolute top-0 left-0 z-[10000] w-full h-[var(--header-height)] flex items-center p-4 ${className}`}
-    >
+    <header className={`absolute top-0 left-0 z-40 w-full h-[var(--header-height)] flex items-center p-4 ${className}`}>
       {children}
     </header>
   );

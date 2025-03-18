@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ROUTE_PATH } from '@/constants/route';
-import logoError from '@/assets/logo-error.png';
+import logoError from '@/assets/logo-error.webp';
 import Image from 'next/image';
 
 export default function notFound() {

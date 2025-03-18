@@ -25,7 +25,7 @@ const YearSelector: React.FC<YearSelectorProps> = ({ value, onChange }) => {
         <SelectGroup>
           {map(years, year => (
             <SelectItem key={year} value={year}>
-              {`${year}주간`}
+              {`${year}년`}
             </SelectItem>
           ))}
         </SelectGroup>

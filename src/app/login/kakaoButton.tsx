@@ -1,18 +1,33 @@
 'use client';
 
-import { useAuth } from '@/hooks/auth/useAuth';
 import { Button } from '@/components/ui/button/Button';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { ROUTE_PATH } from '@/constants/route';
 
 interface Props {
   className?: string;
 }
 
 export default function KakaoButton({ className }: Props) {
-  const { getAuthUrl } = useAuth();
-
+  const { reloadAuthData, getLoginPageUrl } = useAuth();
+  const { handleError } = useErrorHandler();
+  const router = useRouter();
   const handleLogin = () => {
-    window.location.href = getAuthUrl;
+    try {
+      window.location.href = getLoginPageUrl();
+    } catch (error) {
+      handleError(error);
+    }
   };
+
+  useEffect(() => {
+    if (reloadAuthData()) {
+      router.push(ROUTE_PATH.KEYWORDS);
+    }
+  }, [router, reloadAuthData, handleError]);
 
   return (
     <Button

@@ -12,7 +12,7 @@ interface AlertDialogProps extends AlertDialogPrimitive.AlertDialogProps {
   containerSelector?: string;
 }
 
-const AlertDialog = ({ containerSelector, ...props }: AlertDialogProps) => {
+const AlertDialog = ({ containerSelector = '#main', ...props }: AlertDialogProps) => {
   return (
     <AlertDialogContext.Provider value={{ containerSelector }}>
       <AlertDialogPrimitive.Root {...props} />
@@ -143,7 +143,7 @@ const AlertDialogAction = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}
-    className={cn(buttonVariants(), 'bg-white text-greyscale-90', className)}
+    className={cn(buttonVariants(), 'bg-white text-greyscale-90 hover:bg-greyscale-30', className)}
     {...props}
   />
 ));

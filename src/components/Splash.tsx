@@ -1,4 +1,4 @@
-import logoWithBrandImg from '@/assets/logo-with-brand.png';
+import logoWithBrandImg from '@/assets/logo-with-brand.webp';
 import Image from 'next/image';
 
 export function Splash() {

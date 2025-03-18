@@ -1,9 +1,8 @@
-'use client';
 import Link from 'next/link';
 import { ROUTE_PATH } from '@/constants/route';
 import KakaoButton from '@/app/login/kakaoButton';
 import Image from 'next/image';
-import logoWithBrandImg from '@/assets/logo-with-brand.png';
+import logoWithBrandImg from '@/assets/logo-with-brand.webp';
 
 export default function LoginPage() {
   return (

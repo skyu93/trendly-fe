@@ -1,0 +1,22 @@
+# 개발 환경 파일
+node_modules
+npm-debug.log
+.git
+.github
+.vscode
+
+# 빌드 결과물
+.next
+out
+
+# 환경 변수 (보안을 위해 제외)
+.env*
+!.env.example
+
+# 문서 파일
+README.md
+*.md
+
+# 로그 및 임시 파일
+*.log
+.DS_Store

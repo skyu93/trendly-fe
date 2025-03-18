@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import localFont from 'next/font/local';
 import SideContainer from '@/app/SideContainer';
 import SvgSprites from '@/components/icon/SvgSprites';
+import GlobalErrorBoundary from '@/app/GlobalErrorBoundary';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,12 +33,12 @@ export const metadata: Metadata = {
     title: 'Trendly',
     description: '당신의 생각이 트렌드가 되는 순간',
     type: 'website',
-    url: 'https://example.com',
+    url: 'https://trendly.kr',
     images: [
       {
-        url: 'https://example.com/og-image.jpg',
-        width: 800,
-        height: 600,
+        url: 'https://trendly-fe.vercel.app/thumbnail.jpg',
+        width: 704,
+        height: 352,
       },
     ],
   },
@@ -49,17 +50,15 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="ko">
       <body className={`${suite.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <SvgSprites />
         <SideContainer />
-        <main id="main">{children}</main>
+        <main id="main">
+          <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
+        </main>
       </body>
     </html>
   );
