@@ -140,7 +140,6 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
                 <Input
                   className="mt-4 mb-6"
                   maxLength={8}
-                  variant="error"
                   type="number"
                   value={birthDate}
                   onChange={handleBirthDateInput}
