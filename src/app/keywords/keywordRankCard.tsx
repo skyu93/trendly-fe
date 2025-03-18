@@ -35,7 +35,7 @@ export default function KeywordRankCard({ rank, keyword, activeIndex, handleMous
   return (
     <>
       <div
-        className={`group flex items-center justify-between px-3 h-[67px] rounded-lg 
+        className={`group flex items-center justify-between px-3 h-[67px] rounded-lg
                    ${isActive ? 'bg-greyscale-20' : ''}
                    hover:bg-greyscale-20`}
         onMouseEnter={handleMouseEnter}
@@ -57,9 +57,8 @@ export default function KeywordRankCard({ rank, keyword, activeIndex, handleMous
         <Button
           onClick={() => setShowDialog(true)}
           variant="outline"
-          className={`py-2 px-3 border-greyscale-80 bg-greyscale-90 
-                     ${isActive ? 'text-primary-60' : 'text-greyscale-20'} 
-                     group-hover:text-primary-60`}
+          className={`py-2 px-3 border-greyscale-80 bg-greyscale-90 text-primary-60
+                        group-hover:text-primary-60`}
         >
           <span>채팅하기</span>
           <SvgIcon id="add-chat" />

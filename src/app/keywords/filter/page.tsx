@@ -14,6 +14,7 @@ export default function FilterPage() {
   const { filterPeriod, setFilterPeriod, monthly, setMonthly, weekly, setWeekly, daily, setDaily, init } =
     useKeywordRankFilter();
   const router = useRouter();
+
   return (
     <div className="w-full flex flex-col justify-between page-container">
       <Accordion type="single" value={filterPeriod} onValueChange={setFilterPeriod}>
