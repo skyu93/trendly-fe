@@ -43,7 +43,9 @@ class AuthService {
   }
 
   public async logout(): Promise<void> {
-    await AuthApi.logout();
+    if (TokenStorage.isTokenValid()) {
+      await AuthApi.logout();
+    }
     TokenStorage.clearToken();
   }
 
