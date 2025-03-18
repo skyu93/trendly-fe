@@ -53,11 +53,12 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
       <AlertDialog open={showDialog}>
         <AlertDialogContent className="w-[80%]">
           <AlertDialogHeader>
-            <AlertDialogTitle>탈퇴하기</AlertDialogTitle>
+            <AlertDialogTitle>탈퇴를 진행 하시겠습니까?</AlertDialogTitle>
             <AlertDialogDescription className="text-center">
               <div className="flex flex-col">
-                <span>탈퇴 시 참여하셨던 채팅방 내용은 즉시 삭제됩니다.</span>
-                <span>정말 탈퇴하시겠습니까?</span>
+                <span>탈퇴 시, 채팅•좋아요•이모지 등</span>
+                <span>개인 활동 내역을 복구할 수 없으며,</span>
+                <span>7일 간 재가입이 불가합니다.</span>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
