@@ -76,6 +76,11 @@ body {
     padding-top: var(--header-height);
     height: calc(100dvh - var(--header-height));
   }
+
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+  }
 }
 
 @media screen and (max-width: 450px) {
