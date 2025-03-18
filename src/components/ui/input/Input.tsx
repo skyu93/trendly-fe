@@ -9,7 +9,7 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: 'bg-greyscale-80 hover:bg-greyscale-70',
-        error: 'border-[#E97979] text-red-900 focus-visible:ring-red-500',
+        error: 'border-[#E97979] bg-greyscale-80',
       },
       inputSize: {
         default: 'h-10 p-3 text-sm',
@@ -22,7 +22,6 @@ const inputVariants = cva(
       },
       dataType: {
         default: '',
-        brith: 'rounded-[12px] border border-input text-center',
         count: 'relative pr-12', // 글자 수 표시 공간 확보
       },
     },
@@ -36,74 +35,48 @@ const inputVariants = cva(
 );
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {
-  dataType?: 'default' | 'brith' | 'count';
-  maxLength?: number; // maxLength 지원
+  dataType?: 'default' | 'count';
+  maxLength?: number;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, variant, inputSize, inputWidth, dataType, maxLength = 10, ...props }, ref) => {
+  ({ className, type, variant, inputSize, inputWidth, onChange, dataType, maxLength = 10, ...props }, ref) => {
     // 전달받은 value가 있으면 사용하고, 없으면 내부 상태 관리
     const isControlled = props.value !== undefined;
-    const [internalValue, setInternalValue] = React.useState(props.defaultValue?.toString() || '');
-
-    // 현재 표시할 값 (외부 제어 또는 내부 상태)
-    const value = isControlled ? props.value?.toString() : internalValue;
-
-    // number 타입 input의 화살표 UI 제거를 위한 스타일
-    const numberInputStyle: React.CSSProperties =
-      type === 'number'
-        ? {
-            WebkitAppearance: 'none',
-            MozAppearance: 'textfield',
-            appearance: 'textfield',
-            margin: 0,
-          }
-        : {};
+    const value = isControlled ? props.value?.toString() : props.defaultValue?.toString() || '';
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      let newValue = e.target.value;
+      if (!onChange) {
+        return;
+      }
 
-      // number 타입인 경우 숫자만 입력 허용
       if (type === 'number') {
-        newValue = newValue.replace(/[^0-9]/g, '');
+        // 숫자와 부호, 소수점만 남기고 모두 제거
+        let newValue = e.target.value.replace(/[^\d.-]/g, '');
+
+        // maxLength 적용
+        if (maxLength && newValue.length > maxLength) {
+          newValue = newValue.slice(0, maxLength);
+        }
+
+        e.target.value = newValue;
+      } else if (maxLength && e.target.value.length > maxLength) {
+        // number 타입이 아닌 경우에도 maxLength 확인
+        e.target.value = e.target.value.slice(0, maxLength);
       }
 
-      // maxLength 적용
-      if (maxLength) {
-        newValue = newValue.slice(0, maxLength);
-      }
-
-      // 내부 상태 업데이트 (비제어 컴포넌트인 경우만)
-      if (!isControlled) {
-        setInternalValue(newValue);
-      }
-
-      // 원본 이벤트 객체의 값을 변경하여 상위 컴포넌트에 전달
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
-
-      if (nativeInputValueSetter) {
-        nativeInputValueSetter.call(e.target, newValue);
-        const event = new Event('input', { bubbles: true });
-        e.target.dispatchEvent(event);
-      }
-
-      // onChange 콜백 호출
-      if (props.onChange) {
-        props.onChange(e);
-      }
+      onChange(e);
     };
 
     return (
       <div className="relative w-full">
         <input
-          type={type === 'number' ? 'text' : type} // number 타입을 text로 변경하고 직접 제어
+          type={type}
           className={cn(inputVariants({ variant, inputSize, inputWidth, dataType }), className)}
           ref={ref}
           value={value}
-          onChange={handleChange}
-          style={numberInputStyle}
           {...props}
-          maxLength={undefined} // 직접 처리하므로 HTML maxLength 속성은 제거
+          onChange={handleChange}
         />
         {dataType === 'count' && maxLength && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
