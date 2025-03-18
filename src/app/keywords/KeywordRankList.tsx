@@ -9,18 +9,16 @@ import { ROUTE_PATH } from '@/constants/route';
 import { map } from 'es-toolkit/compat';
 import { useKeywordRankFilter } from '@/hooks/useKeywordRankFilter';
 import useRotatingIndex from '@/hooks/useRotationIndex';
+import { KeywordPlatformRanking } from '@/services/keyword/keywordsRanking.type';
 
 interface Props {
   title: string;
-  list: {
-    rank: number;
-    keyword: string;
-  }[];
+  ranking: KeywordPlatformRanking[];
 }
-export default function KeywordRankList({ title, list }: Props) {
+export default function KeywordRankList({ title, ranking }: Props) {
   const router = useRouter();
   const { filterPeriod } = useKeywordRankFilter();
-  const { activeIndex, handleMouseEnter, handleMouseLeave } = useRotatingIndex({ listLength: list.length });
+  const { activeIndex, handleMouseEnter, handleMouseLeave } = useRotatingIndex({ listLength: ranking.length });
 
   return (
     <div className="flex flex-col w-full h-full">
@@ -38,12 +36,12 @@ export default function KeywordRankList({ title, list }: Props) {
         </div>
       </div>
 
-      <ScrollArea className="flex-1">
-        {map(list, ({ rank, keyword }) => (
-          <div key={keyword}>
+      <ScrollArea className="flex-1 pr-3">
+        {map(ranking, ({ rank, keywordName }) => (
+          <div key={keywordName}>
             <KeywordRankCard
               rank={rank}
-              keyword={keyword}
+              keyword={keywordName}
               activeIndex={activeIndex}
               handleMouseEnter={handleMouseEnter}
               handleMouseLeave={handleMouseLeave}
@@ -51,8 +49,8 @@ export default function KeywordRankList({ title, list }: Props) {
             <Separator className="bg-greyscale-80" />
           </div>
         ))}
-        {list.length > 0 && (
-          <div className="px-2 py-3 bg-greyscale-80 flex flex-col mt-3 text-[10px] rounded-[12px]">
+        {ranking.length > 0 && (
+          <div className="px-2 py-3 bg-greyscale-80 flex flex-col mt-3 mb-[30px] text-[10px] rounded-[12px]">
             <div className="flex text-greyscale-30">
               <span className="mr-2">•</span>
               <div className="flex flex-col">

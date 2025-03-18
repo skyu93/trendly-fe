@@ -6,4 +6,6 @@ export const API_PATH = {
   USER_ME: '/auth/user/me',
   USER_UPDATE: '/auth/user/update',
   USER_DELETE: '/auth/user/delete',
+
+  KEYWORDS_RANKING: '/keywords/ranking',
 } as const;
