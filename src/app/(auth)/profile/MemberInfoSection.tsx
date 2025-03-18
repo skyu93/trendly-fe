@@ -21,7 +21,7 @@ interface Props {
 
 export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
   const [gender, setGender] = useState<Gender | null>(user.gender);
-  const [birthdate, setBirthdate] = useState<string>(user.birthDate ? join(user.birthDate.split('-'), '') : '');
+  const [birthDate, setBirthDate] = useState<string>(user.birthDate ? join(user.birthDate.split('-'), '') : '');
   const userService = useMemo(() => new UserService(), []);
   const { setUser } = useAuth();
   const { handleError } = useErrorHandler();
@@ -30,7 +30,7 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
       try {
         const user = await userService.update({
           gender,
-          birthdate: birthdate ? dayjs(birthdate, 'YYYYMMDD').format('YYYY-MM-DD') : birthdate,
+          birthDate: birthDate ? dayjs(birthDate, 'YYYYMMDD').format('YYYY-MM-DD') : birthDate,
         });
         if (user) {
           setUser(user);
@@ -46,15 +46,15 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
     setIsEditing(!isEditing);
   };
 
-  const birthdateLabel = useMemo(() => {
-    if (isNil(birthdate) || isEmpty(birthdate)) {
+  const birthDateLabel = useMemo(() => {
+    if (isNil(birthDate) || isEmpty(birthDate)) {
       return '생년월일을 입력해주세요.';
     }
-    return dayjs(birthdate, 'YYYYMMDD').format('YYYY년 MM월 DD일');
-  }, [birthdate]);
+    return dayjs(birthDate, 'YYYYMMDD').format('YYYY년 MM월 DD일');
+  }, [birthDate]);
 
-  const handleBirthdateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBirthdate(event.target.value);
+  const handleBirthDateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBirthDate(event.target.value);
   };
 
   return (
@@ -100,12 +100,12 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
                   className="mt-4 mb-6"
                   maxLength={8}
                   type="number"
-                  value={birthdate}
-                  onChange={handleBirthdateInput}
+                  value={birthDate}
+                  onChange={handleBirthDateInput}
                   placeholder="20000101"
                 />
               ) : (
-                <div className="text-greyscale-10">{birthdateLabel}</div>
+                <div className="text-greyscale-10">{birthDateLabel}</div>
               )}
             </div>
           </div>
