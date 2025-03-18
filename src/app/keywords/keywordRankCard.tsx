@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 import PreChatSetupDialog from '@/app/keywords/PreChatSetupDialog';
+import { useAuth } from '@/hooks/auth/useAuth';
 
 interface Props {
   rank: number;
@@ -18,7 +19,19 @@ interface Props {
 export default function KeywordRankCard({ rank, keyword, activeIndex, handleMouseEnter, handleMouseLeave }: Props) {
   const [showDialog, setShowDialog] = useState(false);
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const isActive = activeIndex === rank;
+
+  const goToChatRoom = (actionState: boolean) => {
+    if (actionState) {
+      if (!isAuthenticated()) {
+        router.push(ROUTE_PATH.LOGIN_INVITATION);
+      } else {
+        router.push(ROUTE_PATH.CHAT);
+      }
+    }
+    setShowDialog(false);
+  };
   return (
     <>
       <div
@@ -52,15 +65,7 @@ export default function KeywordRankCard({ rank, keyword, activeIndex, handleMous
           <SvgIcon id="add-chat" />
         </Button>
       </div>
-      <PreChatSetupDialog
-        open={showDialog}
-        onClose={(actionState: boolean) => {
-          if (actionState) {
-            router.push(ROUTE_PATH.CHAT);
-          }
-          setShowDialog(false);
-        }}
-      />
+      <PreChatSetupDialog open={showDialog} onClose={goToChatRoom} />
     </>
   );
 }
