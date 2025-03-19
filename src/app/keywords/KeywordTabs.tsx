@@ -35,7 +35,7 @@ export default function KeywordTabs() {
       return [];
     }
     return keywordRankingData.keywordsPlatformRanking;
-  }, [currentTab, keywordRankingData?.keywordsPlatformRanking]);
+  }, [keywordRankingData?.keywordsPlatformRanking]);
 
   return (
     <>

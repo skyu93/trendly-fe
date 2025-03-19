@@ -26,7 +26,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
       return;
     }
     setIsAuthorized(true);
-  }, [reloadAuthData, handleError, isAuthenticated, user]);
+  }, [reloadAuthData, handleError, isAuthenticated, user, isLogout]);
 
   // 인증 체크 중이거나 인증되지 않은 경우
   if (!isAuthorized) {
