@@ -26,9 +26,12 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
 
       switch (code) {
         case ERROR_CODES.TOKEN_INVALID:
+          router.push(ROUTE_PATH.LOGIN_INVITATION);
+          break;
         case ERROR_CODES.FORBIDDEN:
           // 토큰 만료 처리
           router.push(ROUTE_PATH.LOGIN_INVITATION);
+          setError(null);
           break;
         case ERROR_CODES.LOGIN_FAILED:
           // 로그인 실패 처리
@@ -42,7 +45,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
     } else if (error) {
       console.error(error);
     }
-  }, [router, error]);
+  }, [router, error, setError]);
 
   useEffect(() => {
     handleErrorRouter();

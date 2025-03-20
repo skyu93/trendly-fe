@@ -1,11 +1,10 @@
 'use client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch/Switch';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { UserInfo } from '@/services/user/user.type';
-import UserService from '@/services/user/userService';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 
 interface Props {
   user: UserInfo;
@@ -14,15 +13,13 @@ interface Props {
 
 export function MarketingSection({ user, isEditing }: Props) {
   const [checked, setChecked] = useState(user.marketingOpt);
-  const userService = useMemo(() => new UserService(), []);
   const { handleError } = useErrorHandler();
-  const { setUser } = useAuth();
+  const { updateInfo } = useUser();
   const handleChange = async (checked: boolean) => {
     setChecked(checked);
 
     try {
-      const user = await userService.update({ marketingOpt: checked });
-      setUser(user);
+      await updateInfo({ marketingOpt: checked });
     } catch (error) {
       setChecked(!checked); // 실패 시 상태 원복
       handleError(error);

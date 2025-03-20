@@ -3,31 +3,30 @@
 import { Button } from '@/components/ui/button/Button';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import { ROUTE_PATH } from '@/constants/route';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Props {
   className?: string;
 }
 
 export default function KakaoButton({ className }: Props) {
-  const { reloadAuthData, getLoginPageUrl } = useAuth();
+  const { getLoginPageUrl } = useUser();
   const { handleError } = useErrorHandler();
+  const { isAuthorized } = useAuth();
   const router = useRouter();
   const handleLogin = () => {
     try {
-      window.location.href = getLoginPageUrl();
+      if (isAuthorized) {
+        router.push(ROUTE_PATH.KEYWORDS);
+      } else {
+        window.location.href = getLoginPageUrl();
+      }
     } catch (error) {
       handleError(error);
     }
   };
-
-  useEffect(() => {
-    if (reloadAuthData()) {
-      router.push(ROUTE_PATH.KEYWORDS);
-    }
-  }, [router, reloadAuthData, handleError]);
 
   return (
     <Button

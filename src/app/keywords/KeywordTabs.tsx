@@ -5,7 +5,7 @@ import { map } from 'es-toolkit/compat';
 import KeywordRankList from '@/app/keywords/KeywordRankList';
 import { useEffect, useMemo, useState } from 'react';
 import { useKeywordRankFilter } from '@/hooks/useKeywordRankFilter';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import MarketingConsentDrawer from '@/app/keywords/MarketingConsentDrawer';
 
 const TAB_LIST = [
@@ -19,11 +19,11 @@ type TabValue = (typeof TAB_LIST)[number]['value'];
 export default function KeywordTabs() {
   const [currentTab, setCurrentTab] = useState<TabValue>('searchEngine');
   const { getContentsTitle, getKeywords, keywordRankingData, filterPeriod } = useKeywordRankFilter();
-  const { reloadAuthData } = useAuth();
+  const { refreshAuthState } = useUser();
 
   useEffect(() => {
-    reloadAuthData();
-  }, [reloadAuthData]);
+    refreshAuthState();
+  }, [refreshAuthState]);
 
   useEffect(() => {
     getKeywords();
