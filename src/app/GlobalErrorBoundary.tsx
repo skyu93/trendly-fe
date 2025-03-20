@@ -64,7 +64,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
               <>
                 <AlertDialogTitle>로그인 만료</AlertDialogTitle>
                 <AlertDialogDescription className="flex flex-col items-center justify-center text-greyscale-30">
-                  <span className="text-xs">자동으로 로그아웃 되었어요.</span>
+                  <span className="text-xs">로그인 후 24시간이 지나 자동으로 로그아웃 되었어요.</span>
                   <span className="text-xs">다시 로그인해주세요</span>
                 </AlertDialogDescription>
               </>
