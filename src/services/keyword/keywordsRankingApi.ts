@@ -4,7 +4,7 @@ export class KeywordsRankingApi {
   static getKeywords = async (currentTime: string, period?: KeywordFilterPeriod): Promise<KeywordRankingData> => {
     // const { data } = await Api.get<KeywordRankingData>(`${API_PATH.KEYWORDS_RANKING}${period ? `/${period}` : ''}?currentTime=${currentTime}`);
     // return data;
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     const baseData: KeywordRankingData = {
       category: '전체',

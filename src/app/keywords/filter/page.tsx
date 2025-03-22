@@ -46,7 +46,7 @@ export default function FilterPage() {
             <div className="flex items-center justify-between gap-[10px]">
               <YearSelector value={weekly.year} onChange={v => setWeekly({ ...weekly, year: v })} />
               <MonthSelector value={weekly.month} onChange={v => setWeekly({ ...weekly, month: v })} />
-              <WeekSelector value={weekly.week} onChange={v => setWeekly({ ...weekly, month: v })} />
+              <WeekSelector value={weekly.week} onChange={v => setWeekly({ ...weekly, week: v })} />
             </div>
           </AccordionContent>
         </AccordionItem>
