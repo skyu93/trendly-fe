@@ -10,10 +10,10 @@ import { StaticImageData } from 'next/image';
 const PROFILE_IMAGES: StaticImageData[] = [ProfileImage1, ProfileImage2, ProfileImage3, ProfileImage4, ProfileImage5];
 
 export default function useProfileImage() {
-  const [imageMap, setImageMap] = useState<Map<string, StaticImageData>>(new Map());
+  const [imageMap, setImageMap] = useState<Map<number, StaticImageData>>(new Map());
 
   const getImageById = useCallback(
-    (id: string): StaticImageData | undefined => {
+    (id: number): StaticImageData | undefined => {
       return imageMap.get(id);
     },
     [imageMap],
@@ -25,7 +25,7 @@ export default function useProfileImage() {
   }, []);
 
   const saveImage = useCallback(
-    (id: string, image?: HTMLImageElement): StaticImageData | undefined => {
+    (id: number, image?: HTMLImageElement): StaticImageData | undefined => {
       // 이미 있는 ID인지 확인
       if (imageMap.has(id)) {
         return;
