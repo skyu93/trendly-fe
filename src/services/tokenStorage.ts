@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { isEmpty } from 'es-toolkit/compat';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -119,12 +120,10 @@ export const TokenStorage = (() => {
   };
 
   const getAuthHeader = (): string | null => {
-    const authData = getAuthData();
-    if (!authData) {
+    const { accessToken } = getAuthData();
+    if (isEmpty(accessToken)) {
       return null;
     }
-
-    const { accessToken } = authData;
     return `${tokenType} ${accessToken}`;
   };
 
