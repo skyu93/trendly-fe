@@ -48,6 +48,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
           onKeyDown={handleKeyDown}
           placeholder="내용을 입력해 주세요"
           className="flex-1 p-2 mx-2 rounded-full bg-greyscale-80 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          maxLength={500}
           autoFocus
         />
         <Button onClick={handleSend} className="w-10 h-10 rounded-full">
