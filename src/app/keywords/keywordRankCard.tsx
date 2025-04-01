@@ -29,6 +29,11 @@ export default function KeywordRankCard({ rank, keyword, roomId }: Props) {
       return;
     }
 
+    if (!isAuthenticated()) {
+      router.push(ROUTE_PATH.LOGIN_INVITATION);
+      return;
+    }
+
     try {
       if (isJoinedChatRoom(roomId)) {
         const success = await joinRoom({
@@ -49,11 +54,7 @@ export default function KeywordRankCard({ rank, keyword, roomId }: Props) {
   const goToChatRoom = useCallback(
     (actionState: boolean) => {
       if (actionState) {
-        if (!isAuthenticated()) {
-          router.push(ROUTE_PATH.LOGIN_INVITATION);
-        } else {
-          router.push(ROUTE_PATH.CHAT);
-        }
+        router.push(ROUTE_PATH.CHAT);
         return;
       }
       setShowDialog(false);
