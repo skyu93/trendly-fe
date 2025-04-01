@@ -5,6 +5,7 @@ export interface KeywordPlatformRanking {
   keywordName: string;
   rank: number;
   volume: number;
+  roomId: number;
 }
 export type KeywordFilterPeriod = 'daily' | 'weekly' | 'monthly';
 export interface KeywordRankingData {

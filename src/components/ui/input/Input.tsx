@@ -9,7 +9,7 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: 'bg-greyscale-80 hover:bg-greyscale-70',
-        error: 'border-[#E97979] bg-greyscale-80',
+        error: 'border border-[#DD5873] bg-greyscale-80',
       },
       inputSize: {
         default: 'h-10 p-3 text-sm',
@@ -37,10 +37,26 @@ const inputVariants = cva(
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {
   dataType?: 'default' | 'count';
   maxLength?: number;
+  errorMessage?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, variant, inputSize, inputWidth, onChange, dataType, maxLength = 10, ...props }, ref) => {
+  (
+    {
+      className,
+      type,
+      variant,
+      inputSize,
+      inputWidth,
+      onChange,
+      dataType,
+      maxLength = 10,
+      errorMessage,
+      autoFocus = false,
+      ...props
+    },
+    ref,
+  ) => {
     // 전달받은 value가 있으면 사용하고, 없으면 내부 상태 관리
     const isControlled = props.value !== undefined;
     const value = isControlled ? props.value?.toString() : props.defaultValue?.toString() || '';
@@ -69,20 +85,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className="relative w-full">
+      <div className={`relative w-full ${className}`}>
         <input
           type={type}
-          className={cn(inputVariants({ variant, inputSize, inputWidth, dataType }), className)}
+          className={cn(inputVariants({ variant, inputSize, inputWidth, dataType }))}
           ref={ref}
           value={value}
           {...props}
           onChange={handleChange}
+          autoFocus={autoFocus}
         />
         {dataType === 'count' && maxLength && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+          <div className="absolute right-3 top-3 text-xs text-muted-foreground">
             {value?.length || 0}/{maxLength}자
           </div>
         )}
+        {errorMessage && <div className="w-full justify-start text-xs text-[#DD5873] pl-3 mt-3">{errorMessage}</div>}
       </div>
     );
   },

@@ -15,9 +15,11 @@ import { ApiError } from '@/services/apiError';
 import { ERROR_CODES } from '@/constants/errorCodes';
 import { ROUTE_PATH } from '@/constants/route';
 import { useRouter } from 'next/navigation';
+import { TokenStorage } from '@/services/tokenStorage';
 
 export default function GlobalErrorBoundary({ children }: { children: ReactNode }) {
   const { isError, error, setError } = useErrorHandler();
+
   const router = useRouter();
 
   const handleErrorRouter = useCallback(() => {
@@ -26,6 +28,7 @@ export default function GlobalErrorBoundary({ children }: { children: ReactNode 
 
       switch (code) {
         case ERROR_CODES.TOKEN_INVALID:
+          TokenStorage.clearToken();
           router.push(ROUTE_PATH.LOGIN_INVITATION);
           break;
         case ERROR_CODES.FORBIDDEN:

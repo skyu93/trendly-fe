@@ -81,6 +81,23 @@ body {
   input[type='number']::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
   }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thumb-transparent::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 9999px;
+  }
+
+  .hover\:scrollbar-thumb-gray-500\/50:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(107, 114, 128, 0.5);
+  }
+
+  .scrollbar-thumb-gray-500\/50::-webkit-scrollbar-thumb {
+    background-color: rgba(107, 114, 128, 0.5);
+  }
 }
 
 @media screen and (max-width: 450px) {
