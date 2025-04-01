@@ -4,14 +4,17 @@ import { Button } from '@/components/ui/button/Button';
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useChat } from '@/hooks/useChat';
 
 export default function LogoutButton() {
   const { logout } = useUser();
   const router = useRouter();
   const { handleError } = useErrorHandler();
+  const { disconnect } = useChat();
   const handleLogout = () => {
     try {
       logout();
+      disconnect();
     } catch (error) {
       handleError(error);
     } finally {

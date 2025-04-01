@@ -42,7 +42,19 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>,
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, type, variant, inputSize, inputWidth, onChange, dataType, maxLength = 10, errorMessage, ...props },
+    {
+      className,
+      type,
+      variant,
+      inputSize,
+      inputWidth,
+      onChange,
+      dataType,
+      maxLength = 10,
+      errorMessage,
+      autoFocus = false,
+      ...props
+    },
     ref,
   ) => {
     // 전달받은 value가 있으면 사용하고, 없으면 내부 상태 관리
@@ -81,6 +93,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           value={value}
           {...props}
           onChange={handleChange}
+          autoFocus={autoFocus}
         />
         {dataType === 'count' && maxLength && (
           <div className="absolute right-3 top-3 text-xs text-muted-foreground">

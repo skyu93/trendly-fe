@@ -7,6 +7,9 @@ export const ERROR_CODES = {
 
   REQUIRED_FIELD: 'EVA001', // 필수 필드 누락
   INVALID_FORMAT: 'EVA002', // 잘못된 데이터 형식
+
+  CHAT_NICKNAME_INVALID: 'E0006',
+  CHAT_CONNECT_FAILED: 'E0007',
 } as const;
 
 export type ErrorCode = Union<typeof ERROR_CODES>;
@@ -20,4 +23,7 @@ export const ErrorMessages: Record<string, string> = {
   // 유효성 검사 에러 메시지
   [ERROR_CODES.REQUIRED_FIELD]: '필수 항목이 누락되었습니다.',
   [ERROR_CODES.INVALID_FORMAT]: '입력 형식이 올바르지 않습니다.',
+
+  [ERROR_CODES.CHAT_NICKNAME_INVALID]: '닉네임이 중복되었습니다. 변경 후 다시 시도하세요',
+  [ERROR_CODES.CHAT_CONNECT_FAILED]: '채팅방 입장에 실패하였습니다.',
 };

@@ -63,5 +63,4 @@ class AuthService {
   }
 }
 
-// auth-service 사용 예시
 export default AuthService;
