@@ -61,7 +61,6 @@ export class ChatService {
   }
 
   public async joinRoom({ roomId, nickname }: ChatJoin): Promise<ChatJoinResponse | null> {
-    debugger;
     if (!this.connection.isConnected()) {
       this.connection.connect();
       return null;
