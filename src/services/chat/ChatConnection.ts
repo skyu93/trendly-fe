@@ -3,11 +3,11 @@ import { isEmpty } from 'es-toolkit/compat';
 import { TokenStorage } from '@/services/tokenStorage';
 import { ChatConnectionConfig, ChatConnectionEventHandlers } from './chat.type';
 import { refreshAccessToken } from '@/services/httpClient';
+import { getChatStorageRoomId } from '@/hooks/useChat';
 
 export class ChatConnection {
   private client: Client | null = null;
   private subscription: { unsubscribe: () => void } | null = null;
-  private currentRoomId: number | null = null;
 
   private eventHandlers: ChatConnectionEventHandlers = {
     onConnect: () => {},
@@ -21,6 +21,10 @@ export class ChatConnection {
   private currentAttempts = 0;
   constructor({ brokerURL, connectHeaders = {} }: ChatConnectionConfig) {
     this.config = { brokerURL, connectHeaders };
+  }
+
+  private getCurrentRoomId() {
+    return getChatStorageRoomId();
   }
 
   public setEventHandlers(handlers: Partial<ChatConnectionEventHandlers>): void {
@@ -44,9 +48,9 @@ export class ChatConnection {
       onConnect: () => {
         this.eventHandlers.onConnect();
 
-        // 연결이 복구되었을 때 이전 채팅방 재구독
-        if (this.currentRoomId) {
-          this.subscribeToRoom(this.currentRoomId);
+        const roomId = this.getCurrentRoomId();
+        if (roomId) {
+          this.subscribeToRoom(roomId);
         }
       },
       onDisconnect: () => {
@@ -109,7 +113,7 @@ export class ChatConnection {
       return false;
     }
 
-    if (this.currentRoomId === roomId && this.subscription) {
+    if (this.getCurrentRoomId() === roomId && this.subscription) {
       return true;
     }
     this.unsubscribe();
@@ -119,8 +123,6 @@ export class ChatConnection {
         this.client?.subscribe(`/topic/rooms/${roomId}`, message => {
           this.handleMessage(message);
         }) ?? null;
-
-      this.currentRoomId = roomId;
       return true;
     } catch (e) {
       const error = e instanceof Error ? e : new Error('채팅방 구독 중 오류가 발생했습니다.');
@@ -134,7 +136,6 @@ export class ChatConnection {
       this.subscription.unsubscribe();
       this.subscription = null;
     }
-    this.currentRoomId = null;
   }
 
   public publish(destination: string, body: string, headers: Record<string, string> = {}): boolean {

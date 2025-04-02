@@ -17,6 +17,28 @@ const createWebSocketUrl = (baseUrl: string): string => {
     : replace(baseUrl, /^http:\/\//i, 'ws://');
 };
 
+const CHAT_STORAGE_KEY = {
+  CURRENT_ROOM_ID: 'chat_current_room_id',
+  CURRENT_ROOM_NAME: 'chat_current_room_name',
+};
+
+// 브라우저 환경인지 확인하는 함수
+const isBrowser = (): boolean => typeof window !== 'undefined';
+
+// 세션 스토리지에서 초기값 로드 (전역 함수로 사용 가능하도록 이름 변경)
+export const getChatStorageRoomId = (): number | null => {
+  if (!isBrowser()) return null;
+
+  const storedValue = sessionStorage.getItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID);
+  return storedValue ? Number(storedValue) : null;
+};
+
+export const getChatStorageRoomName = (): string | null => {
+  if (!isBrowser()) return null;
+
+  return sessionStorage.getItem(CHAT_STORAGE_KEY.CURRENT_ROOM_NAME);
+};
+
 const useChatStore = create<{
   messages: ChatMessage[];
   currentRoomId: number | null;
@@ -33,17 +55,38 @@ const useChatStore = create<{
   setJoinedChatRooms(rooms: JoinedChatRoom[]): void;
 }>(set => ({
   messages: [],
-  currentRoomId: null,
-  currentRoomName: null,
+  currentRoomId: getChatStorageRoomId(),
+  currentRoomName: getChatStorageRoomName(),
   users: {},
   joinedChatRooms: [],
+
   setMessages: (messages: ChatMessage[]) => set({ messages }),
   addMessage: (message: ChatMessage) =>
     set(state => ({
       messages: [...state.messages, message],
     })),
-  setCurrentRoomId: (roomId: number | null) => set({ currentRoomId: roomId }),
-  setCurrentRoomName: (roomName: string | null) => set({ currentRoomName: roomName }),
+  setCurrentRoomId: (roomId: number | null) => {
+    // 세션 스토리지에 저장 (브라우저 환경에서만)
+    if (isBrowser()) {
+      if (roomId === null) {
+        sessionStorage.removeItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID);
+      } else {
+        sessionStorage.setItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID, roomId.toString());
+      }
+    }
+    set({ currentRoomId: roomId });
+  },
+  setCurrentRoomName: (roomName: string | null) => {
+    // 세션 스토리지에 저장 (브라우저 환경에서만)
+    if (isBrowser()) {
+      if (roomName === null) {
+        sessionStorage.removeItem(CHAT_STORAGE_KEY.CURRENT_ROOM_NAME);
+      } else {
+        sessionStorage.setItem(CHAT_STORAGE_KEY.CURRENT_ROOM_NAME, roomName);
+      }
+    }
+    set({ currentRoomName: roomName });
+  },
   setUsers: (users: Record<number, { nickName: string; avatar: StaticImageData }>) => {
     set({ users });
   },
