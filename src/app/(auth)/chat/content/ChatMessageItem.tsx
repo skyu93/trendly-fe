@@ -6,6 +6,7 @@ import { isNil } from 'es-toolkit/compat';
 import { useChat } from '@/hooks/useChat';
 import Image, { StaticImageData } from 'next/image';
 import useProfileImage from '@/hooks/useProfileImage';
+import MessageText from '@/app/(auth)/chat/content/MessageText';
 
 interface ChatMessageProps {
   text: string;
@@ -29,7 +30,7 @@ const ChatMessageItem: React.FC<ChatMessageProps> = ({ text, userId }) => {
       return getRandomImage();
     }
     return users[userId]?.avatar ?? getRandomImage();
-  }, [users, userId]);
+  }, [users, userId, getRandomImage]);
 
   const nickName = useMemo((): string => {
     if (isNil(users) || isNil(users[userId])) {
@@ -52,7 +53,7 @@ const ChatMessageItem: React.FC<ChatMessageProps> = ({ text, userId }) => {
             isOther ? 'bg-greyscale-80 text-white' : 'bg-primary-50 text-greyscale-90'
           }`}
         >
-          {text}
+          <MessageText text={text} />
         </div>
       </div>
     </div>

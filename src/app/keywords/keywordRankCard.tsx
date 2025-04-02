@@ -59,7 +59,7 @@ export default function KeywordRankCard({ rank, keyword, roomId }: Props) {
       }
       setShowDialog(false);
     },
-    [setShowDialog, router, isAuthenticated],
+    [setShowDialog, router],
   );
   return (
     <>
