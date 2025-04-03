@@ -10,6 +10,7 @@ import { useUser } from '@/hooks/user/useUser';
 import { useChat } from '@/hooks/useChat';
 import { isNil } from 'es-toolkit/compat';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useKeywordRankFilter } from '@/hooks/useKeywordRankFilter';
 
 interface Props {
   rank: number;
@@ -23,6 +24,7 @@ export default function KeywordRankCard({ rank, keyword, roomId }: Props) {
   const { isAuthenticated } = useUser();
   const { isJoinedChatRoom, joinRoom } = useChat();
   const { handleError } = useErrorHandler();
+  const { filterPeriod } = useKeywordRankFilter();
 
   const handleEnterChatRoom = async () => {
     if (isNil(roomId)) {
@@ -70,7 +72,7 @@ export default function KeywordRankCard({ rank, keyword, roomId }: Props) {
           </div>
           <span className="ml-[6px]">{keyword}</span>
         </div>
-        {roomId && (
+        {roomId && filterPeriod === 'realtime' && (
           <Button
             onClick={handleEnterChatRoom}
             variant="outline"
