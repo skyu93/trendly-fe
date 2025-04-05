@@ -9,7 +9,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import useProfileImage from '@/hooks/useProfileImage';
 import { useChat } from '@/hooks/useChat';
 import { Button } from '@/components/ui/button/Button';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
@@ -19,6 +18,7 @@ import { ROUTE_PATH } from '@/constants/route';
 
 import { isEmpty } from 'es-toolkit/compat';
 import NickNameForm from '@/components/composite/NickNameForm';
+import { getRandomImage } from '@/lib/utils';
 
 interface Props {
   roomId: number;
@@ -28,7 +28,6 @@ interface Props {
 }
 
 function PreChatSetupDialog({ roomId, roomName, open, onClose }: Props) {
-  const { getRandomImage } = useProfileImage();
   const { isAuthorized } = useAuth();
   const [avatar, setAvatar] = useState(getRandomImage());
   const [nickName, setNickName] = useState('');

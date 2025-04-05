@@ -25,7 +25,6 @@ export const useErrorHandler = create<ErrorState>(set => ({
   },
 
   handleError: (errorInstance: ErrorInstance | null) => {
-    // 상태 업데이트
     set({
       error: errorInstance,
       isError: isNotNil(errorInstance),

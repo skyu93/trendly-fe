@@ -5,8 +5,8 @@ import { useUser } from '@/hooks/user/useUser';
 import { isNil } from 'es-toolkit/compat';
 import { useChat } from '@/hooks/useChat';
 import Image, { StaticImageData } from 'next/image';
-import useProfileImage from '@/hooks/useProfileImage';
 import MessageText from '@/app/(auth)/chat/content/MessageText';
+import { getRandomImage } from '@/lib/utils';
 
 interface ChatMessageProps {
   text: string;
@@ -16,7 +16,6 @@ interface ChatMessageProps {
 const ChatMessageItem: React.FC<ChatMessageProps> = ({ text, userId }) => {
   const { user } = useUser();
   const { users } = useChat();
-  const { getRandomImage } = useProfileImage();
 
   const isOther = useMemo((): boolean => {
     if (isNil(user)) {

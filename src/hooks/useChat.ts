@@ -7,8 +7,8 @@ import { useUser } from '@/hooks/user/useUser';
 import { isNotNil } from 'es-toolkit';
 import { TokenStorage } from '@/services/tokenStorage';
 import { create } from 'zustand/index';
-import useProfileImage from '@/hooks/useProfileImage';
 import { StaticImageData } from 'next/image';
+import { getRandomImage } from '@/lib/utils';
 
 let chatService: ChatService | null = null;
 const createWebSocketUrl = (baseUrl: string): string => {
@@ -105,7 +105,6 @@ export const useChat = () => {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const isLastMessageCalled = useRef<boolean>(false);
-  const { getRandomImage } = useProfileImage();
   const { user } = useUser();
   const {
     messages,

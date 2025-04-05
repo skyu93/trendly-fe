@@ -77,7 +77,7 @@ const DrawerContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
   const { containerSelector } = useDrawerContext();
-  const { isMobileSafari } = useBrowser();
+  const { isSafari, isMobile } = useBrowser();
 
   // container가 있으면 fixed 대신 absolute 사용하고 위치 조정
   const contentStyles = containerSelector
@@ -89,7 +89,7 @@ const DrawerContent = React.forwardRef<
       <DrawerOverlay />
       <DrawerPrimitive.Content
         ref={ref}
-        className={cn(contentStyles, isMobileSafari ? 'mb-20' : '', className)}
+        className={cn(contentStyles, isSafari && isMobile ? 'mb-20' : '', className)}
         {...props}
       >
         {/*<div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />*/}
