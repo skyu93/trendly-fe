@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { useBrowser } from '@/hooks/useBrowser';
 
 // Context 생성
 interface DrawerContextProps {
@@ -76,16 +77,21 @@ const DrawerContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
   const { containerSelector } = useDrawerContext();
+  const { isSafari, isMobile } = useBrowser();
 
   // container가 있으면 fixed 대신 absolute 사용하고 위치 조정
   const contentStyles = containerSelector
-    ? 'absolute bottom-0 left-0 right-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background'
+    ? 'absolute bottom-0 left-0 right-0 z-50 flex flex-col rounded-t-[10px] border bg-background'
     : 'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background';
 
   return (
     <DrawerPortal>
       <DrawerOverlay />
-      <DrawerPrimitive.Content ref={ref} className={cn(contentStyles, className)} {...props}>
+      <DrawerPrimitive.Content
+        ref={ref}
+        className={cn(contentStyles, isSafari && isMobile ? 'mb-20' : '', className)}
+        {...props}
+      >
         {/*<div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />*/}
         {children}
       </DrawerPrimitive.Content>

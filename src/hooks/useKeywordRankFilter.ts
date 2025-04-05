@@ -1,7 +1,7 @@
 import { create } from 'zustand/react';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
-import { KeywordRankingData } from '@/services/keyword/keywordsRanking.type';
+import { DAY_OF_WEEK, KeywordRankingData } from '@/services/keyword/keywordsRanking.type';
 import { KeywordsRankingApi } from '@/services/keyword/keywordsRankingApi';
 
 dayjs.extend(weekOfYear);
@@ -51,8 +51,7 @@ export const useKeywordRankFilter = create<KeywordRankFilterState & KeywordRankF
     const firstDayOfWeek = firstDayOfMonth.day();
 
     // 월요일 시작 기준으로 계산
-    // 일요일(0)이면 6을 더해서 마지막 요일로 처리, 그 외에는 -1 (월요일이 0이 되도록)
-    const adjustedDay = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+    const adjustedDay = firstDayOfWeek === DAY_OF_WEEK.SUNDAY ? DAY_OF_WEEK.SATURDAY : firstDayOfWeek - 1;
 
     // 계산: (현재 일 + 조정된 요일) / 7 올림
     return String(Math.ceil((currentDay + adjustedDay) / 7));
@@ -120,20 +119,53 @@ export const useKeywordRankFilter = create<KeywordRankFilterState & KeywordRankF
           const lastDayOfMonth = dayjs(`${monthly.year}-${monthly.month}`).endOf('month');
           currentTime = lastDayOfMonth.endOf('day').toISOString(); // 해당 월 마지막 날의 23:59:59.999
         } else if (filterPeriod === 'weekly') {
-          // 주차 계산 (해당 월의 n주차의 마지막 날)
-          const startOfMonth = dayjs(`${weekly.year}-${weekly.month}-01`);
+          // 월의 첫 날짜
+          const firstDayOfMonth = dayjs(`${weekly.year}-${weekly.month}-01`);
+
+          // 선택된 주차 (1부터 시작)
           const weekNumber = parseInt(weekly.week, 10);
 
-          // 첫째 주 월요일 찾기
-          let firstMonday = startOfMonth;
-          while (firstMonday.day() !== 1) {
-            // 1은 월요일
-            firstMonday = firstMonday.add(1, 'day');
+          let endOfWeek;
+
+          if (weekNumber === 1) {
+            // 1주차: 월의 첫 날부터 해당 주의 일요일까지
+            // 예: 월의 첫날이 수요일이면, 첫 주는 수~일 (3일간)
+            const firstDayOfWeekInMonth = firstDayOfMonth.day(); // 0(일)~6(토)
+
+            if (firstDayOfWeekInMonth === 0) {
+              // 월 첫날이 일요일이면 그날이 1주차의 마지막 날
+              endOfWeek = firstDayOfMonth;
+            } else {
+              // 그 외의 경우 다음 일요일까지가 1주차
+              const daysUntilSunday = 7 - firstDayOfWeekInMonth;
+              endOfWeek = firstDayOfMonth.add(daysUntilSunday, 'day');
+            }
+          } else {
+            // 2주차 이상: 1주차 이후 7일씩 계산
+            // 월의 첫날이 속한 주의 일요일 찾기
+            const firstDayOfWeekInMonth = firstDayOfMonth.day(); // 0(일)~6(토)
+            let firstSunday;
+
+            if (firstDayOfWeekInMonth === 0) {
+              // 월 첫날이 일요일이면 그날이 첫 주의 마지막 날
+              firstSunday = firstDayOfMonth;
+            } else {
+              // 그 외의 경우 첫 일요일 계산
+              const daysUntilSunday = 7 - firstDayOfWeekInMonth;
+              firstSunday = firstDayOfMonth.add(daysUntilSunday, 'day');
+            }
+
+            // 2주차부터는 첫 일요일 이후 7일씩 더하기
+            endOfWeek = firstSunday.add((weekNumber - 1) * 7, 'day');
+
+            // 월 마지막 날을 초과하지 않도록 조정
+            const lastDayOfMonth = firstDayOfMonth.endOf('month');
+            if (endOfWeek.isAfter(lastDayOfMonth)) {
+              endOfWeek = lastDayOfMonth;
+            }
           }
 
-          // n주차의 일요일 (주의 마지막 날) 계산
-          const endOfWeek = firstMonday.add((weekNumber - 1) * 7 + 6, 'day');
-          currentTime = endOfWeek.endOf('day').toISOString(); // 해당 주 일요일의 23:59:59.999
+          currentTime = endOfWeek.endOf('day').toISOString(); // 해당 주 마지막 날의 23:59:59.999
         } else if (filterPeriod === 'daily') {
           // YYYY-MM-DD 형식
           const selectedDay = dayjs(`${daily.year}-${daily.month}-${daily.day}`);
@@ -146,8 +178,8 @@ export const useKeywordRankFilter = create<KeywordRankFilterState & KeywordRankF
         );
 
         set({ keywordRankingData, isLoading: false });
-      } catch (err) {
-        set({ isLoading: !err });
+      } finally {
+        set({ isLoading: false });
       }
     },
 

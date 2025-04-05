@@ -10,29 +10,26 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button/Button';
-import { useCallback, useMemo } from 'react';
-import { useAuth } from '@/hooks/auth/useAuth';
-import UserService from '@/services/user/userService';
+import { useCallback } from 'react';
+import { useUser } from '@/hooks/user/useUser';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
 
 export default function MarketingConsentDrawer() {
   const { isOpen, setOpen } = useMarketingConsent();
   const { handleError } = useErrorHandler();
-  const { setUser } = useAuth();
-  const userService = useMemo(() => new UserService(), []);
+  const { updateInfo } = useUser();
   const handleClose = useCallback(
     async (agree: boolean) => {
       setOpen(false);
       if (agree) {
         try {
-          const user = await userService.update({ marketingOpt: agree });
-          setUser(user);
+          await updateInfo({ marketingOpt: agree });
         } catch (error) {
           handleError(error);
         }
       }
     },
-    [setOpen, setUser, userService, handleError],
+    [setOpen, updateInfo, handleError],
   );
 
   return (

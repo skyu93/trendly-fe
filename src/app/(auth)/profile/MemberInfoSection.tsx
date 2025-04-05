@@ -8,8 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input/Input';
 import { isEmpty, isNil, join } from 'es-toolkit/compat';
 import { Gender, UserInfo } from '@/services/user/user.type';
-import UserService from '@/services/user/userService';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
 import dayjs from 'dayjs';
 import {
@@ -32,9 +31,7 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
   const [gender, setGender] = useState<Gender | null>(user.gender);
   const [birthDate, setBirthDate] = useState<string>(user.birthDate ? join(user.birthDate.split('-'), '') : '');
   const [showDialog, setShowDialog] = useState<boolean>(false);
-
-  const userService = useMemo(() => new UserService(), []);
-  const { setUser } = useAuth();
+  const { updateInfo } = useUser();
   const { handleError } = useErrorHandler();
 
   const validateBirthDate = (): boolean => {
@@ -70,14 +67,10 @@ export function MemberInfoSection({ user, isEditing, setIsEditing }: Props) {
       const formattedBirthDate =
         birthDate && !isEmpty(birthDate) ? dayjs(birthDate, 'YYYYMMDD').format('YYYY-MM-DD') : birthDate;
 
-      const user = await userService.update({
+      await updateInfo({
         gender,
         birthDate: formattedBirthDate,
       });
-
-      if (user) {
-        setUser(user);
-      }
     } catch (error) {
       handleError(error);
     }

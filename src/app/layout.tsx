@@ -7,6 +7,7 @@ import localFont from 'next/font/local';
 import SideContainer from '@/app/SideContainer';
 import SvgSprites from '@/components/icon/SvgSprites';
 import GlobalErrorBoundary from '@/app/GlobalErrorBoundary';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <SideContainer />
         <main id="main">
           <GlobalErrorBoundary>{children}</GlobalErrorBoundary>
+          <Toaster />
         </main>
       </body>
     </html>

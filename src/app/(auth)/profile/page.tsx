@@ -4,14 +4,14 @@ import { LoginInfoSection } from '@/app/(auth)/profile/LoginInfoSection';
 import { MemberInfoSection } from '@/app/(auth)/profile/MemberInfoSection';
 import { MarketingSection } from '@/app/(auth)/profile/MarketingSection';
 import { useState } from 'react';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import { isNil } from 'es-toolkit/compat';
 
 export default function Page() {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
 
-  if (isNil(user) || !isAuthenticated()) {
+  if (isNil(user)) {
     return null;
   }
 

@@ -1,4 +1,10 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import { isEmpty } from 'es-toolkit/compat';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface AuthData {
   accessToken: string | null;
@@ -66,7 +72,7 @@ export const TokenStorage = (() => {
 
         accessToken = authData.accessToken || null;
         refreshToken = authData.refreshToken || null;
-        refreshExpiresAt = authData.refreshExpiresAt ? dayjs(authData.refreshExpiresAt) : null;
+        refreshExpiresAt = authData.refreshExpiresAt ? dayjs(authData.refreshExpiresAt).tz('Asia/Seoul') : null;
         if (!isTokenValid()) {
           clearToken();
         }
@@ -80,7 +86,7 @@ export const TokenStorage = (() => {
   const setToken = (authData: AuthData): void => {
     accessToken = authData.accessToken;
     refreshToken = authData.refreshToken;
-    refreshExpiresAt = authData.refreshExpiresAt ? dayjs().add(authData.refreshExpiresAt, 'second') : null;
+    refreshExpiresAt = authData.refreshExpiresAt ? dayjs(authData.refreshExpiresAt).tz('Asia/Seoul') : null;
     saveToStorage();
   };
 
@@ -105,10 +111,7 @@ export const TokenStorage = (() => {
     return true;
   };
 
-  const getAuthData = (): AuthData | null => {
-    if (!isTokenValid()) {
-      return null;
-    }
+  const getAuthData = (): AuthData => {
     return {
       accessToken,
       refreshToken,
@@ -117,12 +120,10 @@ export const TokenStorage = (() => {
   };
 
   const getAuthHeader = (): string | null => {
-    const authData = getAuthData();
-    if (!authData) {
+    const { accessToken } = getAuthData();
+    if (isEmpty(accessToken)) {
       return null;
     }
-
-    const { accessToken } = authData;
     return `${tokenType} ${accessToken}`;
   };
 

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import { ROUTE_PATH } from '@/constants/route';
 import { Splash } from '@/components/Splash';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
@@ -14,7 +14,7 @@ const splashDelay = () => new Promise<void>(resolve => setTimeout(resolve, 3000)
 export default function KakaoCallback() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getToken } = useAuth();
+  const { login } = useUser();
   const { handleError } = useErrorHandler();
   const { setOpen } = useMarketingConsent();
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function KakaoCallback() {
       }
 
       try {
-        const [res] = await Promise.all([getToken(code), splashDelay()]);
+        const [res] = await Promise.all([login(code), splashDelay()]);
         setOpen(!!res.isNewUser);
         router.push(ROUTE_PATH.KEYWORDS);
       } catch (error) {
@@ -43,7 +43,7 @@ export default function KakaoCallback() {
       }
     };
     handleKakaoCallback();
-  }, [router, searchParams, getToken, handleError, setOpen]);
+  }, [router, searchParams, login, handleError, setOpen]);
 
   return <Splash />;
 }

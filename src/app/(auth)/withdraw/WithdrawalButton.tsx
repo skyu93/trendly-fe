@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,8 +13,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 import { Button } from '@/components/ui/button/Button';
-import UserService from '@/services/user/userService';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useUser } from '@/hooks/user/useUser';
 
 interface Props {
   isAgreed: boolean;
@@ -24,14 +24,14 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
   const [showDialog, setShowDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const userService = useMemo(() => new UserService(), []);
+  const { deleteAccount } = useUser();
   const { handleError } = useErrorHandler();
 
   const handleConfirm = async () => {
     setIsLoading(true);
     setShowDialog(false);
     try {
-      await userService.delete();
+      await deleteAccount();
       router.replace(ROUTE_PATH.LOGIN);
     } catch (error) {
       handleError(error);

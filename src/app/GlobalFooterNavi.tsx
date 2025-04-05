@@ -5,7 +5,7 @@ import { Suspense, useCallback } from 'react';
 import { ROUTE_PATH, RoutePath } from '@/constants/route';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import { MessageCircle } from 'lucide-react';
 
 export function GlobalFooterNavi() {
@@ -17,7 +17,7 @@ export function GlobalFooterNavi() {
 }
 
 function Navigation() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useUser();
   const pathname = usePathname();
   const isCurrentPage = useCallback((path: RoutePath) => path === pathname, [pathname]);
 

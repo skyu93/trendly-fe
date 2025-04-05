@@ -1,20 +1,24 @@
 'use client';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 import { Button } from '@/components/ui/button/Button';
 import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useChat } from '@/hooks/useChat';
 
 export default function LogoutButton() {
-  const { logout } = useAuth();
+  const { logout } = useUser();
   const router = useRouter();
   const { handleError } = useErrorHandler();
+  const { disconnect } = useChat();
   const handleLogout = () => {
     try {
       logout();
-      router.push(ROUTE_PATH.LOGIN);
+      disconnect();
     } catch (error) {
       handleError(error);
+    } finally {
+      router.push(ROUTE_PATH.LOGIN);
     }
   };
   return (

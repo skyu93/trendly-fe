@@ -10,7 +10,7 @@ import Step2 from '@/assets/on-boarding/step-2.webp';
 import Step3 from '@/assets/on-boarding/step-3.webp';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button/Button';
-import { useAuth } from '@/hooks/auth/useAuth';
+import { useUser } from '@/hooks/user/useUser';
 
 const STEPS = [
   { image: Step1, alt: '온보딩 1단계' },
@@ -22,11 +22,11 @@ export default function OnBoarding() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
-  const { isAuthenticated, reloadAuthData } = useAuth();
+  const { isAuthenticated, refreshAuthState } = useUser();
 
   useEffect(() => {
-    reloadAuthData();
-  }, [reloadAuthData]);
+    refreshAuthState();
+  }, [refreshAuthState]);
 
   useEffect(() => {
     const stepFromQuery = Number(searchParams.get('step')) || 1;

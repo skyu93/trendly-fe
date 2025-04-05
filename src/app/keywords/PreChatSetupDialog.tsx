@@ -1,72 +1,101 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+'use client';
+
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Input } from '@/components/ui/input/Input';
-import Image, { StaticImageData } from 'next/image';
-import useProfileImage from '@/hooks/useProfileImage';
+import { useChat } from '@/hooks/useChat';
+import { Button } from '@/components/ui/button/Button';
+import { useErrorHandler } from '@/hooks/useErrorHandler';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import { ROUTE_PATH } from '@/constants/route';
+
+import { isEmpty } from 'es-toolkit/compat';
+import NickNameForm from '@/components/composite/NickNameForm';
+import { getRandomImage } from '@/lib/utils';
 
 interface Props {
+  roomId: number;
+  roomName: string;
   open: boolean;
   onClose(open: boolean): void;
 }
-export default function PreChatSetupDialog({ open, onClose }: Props) {
-  const actionState = useRef(false);
-  const [avatar, setAvatar] = useState<StaticImageData>();
-  const [nickname, setNickname] = useState<string>('');
-  const { getRandomImage } = useProfileImage();
+
+function PreChatSetupDialog({ roomId, roomName, open, onClose }: Props) {
+  const { isAuthorized } = useAuth();
+  const [avatar, setAvatar] = useState(getRandomImage());
+  const [nickName, setNickName] = useState('');
+  const { joinRoom, errorMessage, clearError } = useChat();
+  const { handleError } = useErrorHandler();
+  const router = useRouter();
 
   useEffect(() => {
     if (open) {
       setAvatar(getRandomImage());
+      setNickName('');
     }
   }, [open, getRandomImage]);
 
-  const handleNickName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(event.target.value);
-  };
-
   const isDisabled = useMemo(() => {
-    if (nickname.length < 1) {
+    if (nickName.length < 2 || !isEmpty(errorMessage)) {
       return true;
     }
     const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]+$/;
-    return !regex.test(nickname);
-  }, [nickname]);
+    return !regex.test(nickName);
+  }, [nickName, errorMessage]);
+
+  const handleEnter = async () => {
+    try {
+      if (!isAuthorized) {
+        return router.push(ROUTE_PATH.LOGIN_INVITATION);
+      }
+      const success = await joinRoom({
+        roomId,
+        roomName,
+        nickname: nickName,
+        avatar,
+      });
+      if (success) {
+        onClose(true);
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
   return (
-    <AlertDialog open={open} onOpenChange={() => onClose(actionState.current)}>
+    <AlertDialog open={open}>
       <AlertDialogContent className="w-[80%]">
         <AlertDialogHeader>
           <AlertDialogTitle>닉네임 설정</AlertDialogTitle>
-          <AlertDialogDescription className="flex flex-col items-center justify-center">
-            {avatar && <Image className="w-20 h-20" src={avatar} alt="무작위 프로필 이미지" />}
-            <Input
-              className="mt-4 mb-6"
-              placeholder="닉네임을 입력해주세요."
-              dataType="count"
-              value={nickname}
-              maxLength={10}
-              onChange={handleNickName}
+          <AlertDialogDescription>
+            <NickNameForm
+              nickName={nickName}
+              errorMessage={errorMessage}
+              avatar={avatar}
+              onChange={setNickName}
+              clearError={clearError}
+              autoFocus
             />
-            <span className="text-xs text-greyscale-30">닉네임은 키워드별로 다르게 설정할 수 있어요.</span>
-            <span className="text-xs text-greyscale-30">한/영/숫자 중 1개 이상을 사용해서 입력 가능해요.</span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction className="h-12" disabled={isDisabled} onClick={() => (actionState.current = true)}>
+          <Button variant="tertiary" className="h-12" disabled={isDisabled} onClick={handleEnter}>
             입장하기
-          </AlertDialogAction>
-          <AlertDialogCancel className="h-12">취소</AlertDialogCancel>
+          </Button>
+          <Button variant="outline" className="h-12" onClick={() => onClose(false)}>
+            취소
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
 }
+
+export default memo(PreChatSetupDialog);

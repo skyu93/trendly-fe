@@ -22,12 +22,12 @@ let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
 
 // 리프레시 토큰으로 새 액세스 토큰 요청
-const refreshAccessToken = async (): Promise<string> => {
+export const refreshAccessToken = async (): Promise<string> => {
   try {
     const { refreshToken } = TokenStorage.getAuthData() ?? { refreshToken: '' };
 
     if (!refreshToken) {
-      throw new Error('리프레시 토큰이 없습니다.');
+      throw new ApiError({ code: ERROR_CODES.TOKEN_INVALID });
     }
 
     const response = await Api.post<AuthResponse>(
@@ -49,11 +49,10 @@ const refreshAccessToken = async (): Promise<string> => {
 
     return accessToken;
   } catch (error) {
-    // 리프레시 토큰도 만료된 경우
-    console.error(error);
     TokenStorage.clearToken();
     throw new ApiError({
       code: ERROR_CODES.TOKEN_INVALID,
+      error,
     });
   }
 };

@@ -43,10 +43,14 @@ class AuthService {
   }
 
   public async logout(): Promise<void> {
-    if (TokenStorage.isTokenValid()) {
+    try {
+      if (!TokenStorage.isTokenValid()) {
+        return;
+      }
       await AuthApi.logout();
+    } finally {
+      TokenStorage.clearToken();
     }
-    TokenStorage.clearToken();
   }
 
   public isAuthenticated(): boolean {
@@ -59,5 +63,4 @@ class AuthService {
   }
 }
 
-// auth-service 사용 예시
 export default AuthService;

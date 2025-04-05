@@ -1,8 +1,10 @@
 'use client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { map } from 'es-toolkit/compat';
 import ChatRoomList from '@/app/(auth)/chats/ChatRoomList';
+import { useChat } from '@/hooks/useChat';
+import ChatRoomSkeleton from '@/app/(auth)/chats/ChatRoomSkeleton';
 
 const TAB_LIST = [
   { label: '인기 채팅방', value: 'popularity' },
@@ -13,17 +15,17 @@ type TabValue = (typeof TAB_LIST)[number]['value'];
 
 export default function ChatsPage() {
   const [currentTab, setCurrentTab] = useState<TabValue>('popularity');
+  const { getMyChatList, myChatRooms, isLoading } = useChat();
 
-  const ranks = useMemo(() => {
+  useEffect(() => {
     if (currentTab === 'my') {
-      return [];
+      getMyChatList();
     }
-    return Array.from({ length: 30 }).map((_, i) => ({
-      title: `키워드 ${i}`,
-      chatRoomUrl: `${currentTab}/${i}`,
-      userCount: currentTab === 'popularity' ? i + 10 : undefined,
-    }));
-  }, [currentTab]);
+  }, [currentTab, getMyChatList]);
+
+  const chatRooms = useMemo(() => {
+    return currentTab === 'my' ? myChatRooms : [];
+  }, [currentTab, myChatRooms]);
 
   return (
     <Tabs defaultValue={currentTab} className="page-container px-4" onValueChange={v => setCurrentTab(v as TabValue)}>
@@ -39,9 +41,10 @@ export default function ChatsPage() {
       {map(TAB_LIST, ({ value }) => {
         return (
           <TabsContent key={value} value={value} className="w-full h-[calc(100%-36px)]">
-            <ChatRoomList list={ranks} />
-            {ranks.length > 0 ? (
-              <ChatRoomList list={ranks} />
+            {isLoading ? (
+              <ChatRoomSkeleton />
+            ) : chatRooms.length > 0 ? (
+              <ChatRoomList list={chatRooms} />
             ) : (
               <div className="absolute inset-0 m-auto w-fit h-fit">
                 <div className="flex flex-col items-center justify-center text-greyscale-40">
