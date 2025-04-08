@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +27,7 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
   const { deleteAccount } = useUser();
   const { handleError } = useErrorHandler();
 
-  const handleConfirm = async () => {
+  const handleConfirm = useCallback(async () => {
     setIsLoading(true);
     setShowDialog(false);
     try {
@@ -38,7 +38,11 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router, deleteAccount, handleError]);
+  const handleCancel = useCallback(() => {
+    setShowDialog(false);
+    router.replace(ROUTE_PATH.MY);
+  }, [router]);
 
   return (
     <>
@@ -66,7 +70,7 @@ export function WithdrawalButton({ isAgreed, className }: Props) {
             <AlertDialogAction className="h-12" onClick={handleConfirm}>
               탈퇴하기
             </AlertDialogAction>
-            <AlertDialogCancel className="h-12" onClick={() => setShowDialog(false)}>
+            <AlertDialogCancel className="h-12" onClick={handleCancel}>
               취소
             </AlertDialogCancel>
           </AlertDialogFooter>
