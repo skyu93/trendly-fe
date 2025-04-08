@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useChat } from '@/hooks/useChat';
 import NicknameEditor from '@/app/(auth)/chat/NicknameEditor';
 import ChatHeader from './header/ChatHeader';
@@ -19,12 +19,12 @@ const ChatRoom: React.FC = () => {
     }
   }, [handleError, error]);
 
-  const handleLoadPreviousMessages = (): void => {
-    if (messages.length === 0 || isLoading || !loadPreviousMessages) {
+  const handleLoadPreviousMessages = useCallback(async (): Promise<void> => {
+    if (messages.length === 0 || isLoading) {
       return;
     }
-    loadPreviousMessages();
-  };
+    await loadPreviousMessages();
+  }, [isLoading, messages, loadPreviousMessages]);
 
   const handleOpenNicknameEditor = (isOpen: boolean): void => {
     setNicknameEditorVisible(isOpen);

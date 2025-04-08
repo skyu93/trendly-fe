@@ -40,7 +40,7 @@ function PreChatSetupDialog({ roomId, roomName, open, onClose }: Props) {
       setAvatar(getRandomImage());
       setNickName('');
     }
-  }, [open, getRandomImage]);
+  }, [open]);
 
   const isDisabled = useMemo(() => {
     if (nickName.length < 2 || !isEmpty(errorMessage)) {

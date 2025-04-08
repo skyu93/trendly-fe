@@ -29,7 +29,7 @@ const ChatMessageItem: React.FC<ChatMessageProps> = ({ text, userId }) => {
       return getRandomImage();
     }
     return users[userId]?.avatar ?? getRandomImage();
-  }, [users, userId, getRandomImage]);
+  }, [users, userId]);
 
   const nickName = useMemo((): string => {
     if (isNil(users) || isNil(users[userId])) {

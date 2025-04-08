@@ -1,104 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ChatJoin, ChatMessage, JoinedChatRoom } from '@/services/chat/chat.type';
+import { ChatJoin, ChatMessage } from '@/services/chat/chat.type';
 import { ChatService } from '@/services/chat/chatService';
 import Api from '@/services/httpClient';
-import { find, forEach, has, isEmpty, isNil, map, replace, startsWith } from 'es-toolkit/compat';
+import { find, forEach, has, isEmpty, isNil, map } from 'es-toolkit/compat';
 import { useUser } from '@/hooks/user/useUser';
 import { isNotNil } from 'es-toolkit';
 import { TokenStorage } from '@/services/tokenStorage';
-import { create } from 'zustand/index';
 import { StaticImageData } from 'next/image';
-import { getRandomImage } from '@/lib/utils';
+import { createWebSocketUrl, getRandomImage } from '@/lib/utils';
+import { useChatStore } from '@/stores/chatStore';
 
 let chatService: ChatService | null = null;
-const createWebSocketUrl = (baseUrl: string): string => {
-  return startsWith(baseUrl, 'https://')
-    ? replace(baseUrl, /^https:\/\//i, 'wss://')
-    : replace(baseUrl, /^http:\/\//i, 'ws://');
-};
-
-const CHAT_STORAGE_KEY = {
-  CURRENT_ROOM_ID: 'chat_current_room_id',
-  CURRENT_ROOM_NAME: 'chat_current_room_name',
-};
-
-// 브라우저 환경인지 확인하는 함수
-const isBrowser = (): boolean => typeof window !== 'undefined';
-
-// 세션 스토리지에서 초기값 로드 (전역 함수로 사용 가능하도록 이름 변경)
-export const getChatStorageRoomId = (): number | null => {
-  if (!isBrowser()) return null;
-
-  const storedValue = sessionStorage.getItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID);
-  return storedValue ? Number(storedValue) : null;
-};
-
-export const getChatStorageRoomName = (): string | null => {
-  if (!isBrowser()) return null;
-
-  return sessionStorage.getItem(CHAT_STORAGE_KEY.CURRENT_ROOM_NAME);
-};
-
-const useChatStore = create<{
-  messages: ChatMessage[];
-  currentRoomId: number | null;
-  currentRoomName: string | null;
-  users: Record<number, { nickName: string; avatar: StaticImageData }>;
-  joinedChatRooms: JoinedChatRoom[];
-
-  setMessages(messages: ChatMessage[]): void;
-  addMessage(messages: ChatMessage): void;
-  setCurrentRoomId(roomId: number | null): void;
-  setCurrentRoomName(roomName: string | null): void;
-  setUsers(users: Record<number, { nickName: string; avatar: StaticImageData }>): void;
-  updateUser(user: { userId: number; nickname: string; avatar: StaticImageData }): void;
-  setJoinedChatRooms(rooms: JoinedChatRoom[]): void;
-}>(set => ({
-  messages: [],
-  currentRoomId: getChatStorageRoomId(),
-  currentRoomName: getChatStorageRoomName(),
-  users: {},
-  joinedChatRooms: [],
-
-  setMessages: (messages: ChatMessage[]) => set({ messages }),
-  addMessage: (message: ChatMessage) =>
-    set(state => ({
-      messages: [...state.messages, message],
-    })),
-  setCurrentRoomId: (roomId: number | null) => {
-    // 세션 스토리지에 저장 (브라우저 환경에서만)
-    if (isBrowser()) {
-      if (roomId === null) {
-        sessionStorage.removeItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID);
-      } else {
-        sessionStorage.setItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID, roomId.toString());
-      }
-    }
-    set({ currentRoomId: roomId });
-  },
-  setCurrentRoomName: (roomName: string | null) => {
-    // 세션 스토리지에 저장 (브라우저 환경에서만)
-    if (isBrowser()) {
-      if (roomName === null) {
-        sessionStorage.removeItem(CHAT_STORAGE_KEY.CURRENT_ROOM_NAME);
-      } else {
-        sessionStorage.setItem(CHAT_STORAGE_KEY.CURRENT_ROOM_NAME, roomName);
-      }
-    }
-    set({ currentRoomName: roomName });
-  },
-  setUsers: (users: Record<number, { nickName: string; avatar: StaticImageData }>) => {
-    set({ users });
-  },
-  updateUser: ({ userId, nickname, avatar }: { userId: number; nickname: string; avatar: StaticImageData }) =>
-    set(state => ({
-      users: {
-        ...state.users,
-        [userId]: { nickName: nickname, avatar },
-      },
-    })),
-  setJoinedChatRooms: (rooms: JoinedChatRoom[]) => set({ joinedChatRooms: rooms }),
-}));
 
 export const useChat = () => {
   const [connected, setConnected] = useState<boolean>(false);
@@ -158,7 +70,7 @@ export const useChat = () => {
       });
     },
     [currentUserId],
-  ); // chatService는 외부 변수이므로 의존성에서 제거
+  );
 
   // 초기화 및 이벤트 핸들러 설정
   useEffect(() => {
@@ -212,7 +124,8 @@ export const useChat = () => {
         });
       }
     };
-  }, [initializeService, users, addMessage, getRandomImage, setUsers]);
+  }, [initializeService, users, addMessage, setUsers]);
+  // getRandomImage 제거: 외부 함수이므로 의존성에 포함되지 않아야 함
 
   // 방 입장 함수
   const joinRoom = useCallback(
@@ -237,15 +150,17 @@ export const useChat = () => {
         const { messages, nicknames } = res;
         setMessages([...messages]);
 
-        const users: Record<number, { nickName: string; avatar: StaticImageData }> = {};
+        const updatedUsers = { ...users };
         forEach(nicknames, (nickName, key) => {
           const userId = Number(key);
-          users[userId] = {
-            nickName,
-            avatar: userId === currentUserId && avatar ? avatar : getRandomImage(),
-          };
+          if (!updatedUsers[userId]) {
+            updatedUsers[userId] = {
+              nickName,
+              avatar: userId === currentUserId && avatar ? avatar : getRandomImage(),
+            };
+          }
         });
-        setUsers(users);
+        setUsers(updatedUsers);
         setCurrentRoomId(roomId);
         setCurrentRoomName(roomName);
         return true;
@@ -257,8 +172,8 @@ export const useChat = () => {
 
       return false;
     },
-    [currentRoomId, currentUserId, getRandomImage, setCurrentRoomId, setCurrentRoomName, setMessages, setUsers],
-  ); // chatService 제거
+    [currentRoomId, currentUserId, setCurrentRoomId, setCurrentRoomName, setMessages, setUsers, users],
+  ); // getRandomImage 제거 & users 추가
 
   // 메시지 전송 함수
   const sendMessage = useCallback(
@@ -274,7 +189,7 @@ export const useChat = () => {
       });
     },
     [currentRoomId, currentUserId],
-  ); // chatService 제거
+  );
 
   // 방 나가기 함수
   const leaveRoom = useCallback(async () => {
@@ -298,7 +213,7 @@ export const useChat = () => {
       setIsLoading(false);
       isLastMessageCalled.current = false;
     }
-  }, [currentUserId, currentRoomId, setUsers, setCurrentRoomId, setCurrentRoomName, setMessages]); // chatService 제거
+  }, [currentUserId, currentRoomId, setUsers, setCurrentRoomId, setCurrentRoomName, setMessages]);
 
   // 재연결 함수
   const reconnect = useCallback(() => {
@@ -306,7 +221,7 @@ export const useChat = () => {
       return;
     }
     chatService.reconnect();
-  }, []); // chatService 제거
+  }, []);
 
   // 메시지 목록 초기화 함수
   const clearMessages = useCallback(() => {
@@ -359,7 +274,7 @@ export const useChat = () => {
       }
     },
     [currentRoomId, currentUserId, currentUser, updateUser],
-  ); // chatService 제거
+  );
 
   const errorMessage = useMemo(() => error?.message, [error]);
 
@@ -367,7 +282,7 @@ export const useChat = () => {
     if (chatService) {
       chatService.disconnect();
     }
-  }, []); // chatService 제거
+  }, []);
 
   const loadPreviousMessages = useCallback(async () => {
     if (!chatService || !currentRoomId || isLoading || isLastMessageCalled.current) {
@@ -377,12 +292,29 @@ export const useChat = () => {
     try {
       const [lastMessage] = messages;
       setIsLoading(true);
-      const newMessages = await chatService.loadPreviousMessages({
+      const res = await chatService.loadPreviousMessages({
         roomId: currentRoomId,
         messageId: lastMessage.messageId,
       });
-      if (!isEmpty(newMessages)) {
-        setMessages([...newMessages, ...messages]);
+
+      if (isNil(res)) {
+        return false;
+      }
+
+      const updatedUsers = { ...users };
+      forEach(res.nicknames, (nickName, key) => {
+        const userId = Number(key);
+        if (!updatedUsers[userId]) {
+          updatedUsers[userId] = {
+            nickName,
+            avatar: getRandomImage(),
+          };
+        }
+      });
+      setUsers(updatedUsers);
+
+      if (!isEmpty(res.messages)) {
+        setMessages([...res.messages, ...messages]);
       } else {
         isLastMessageCalled.current = true;
       }
@@ -391,7 +323,8 @@ export const useChat = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, currentRoomId, isLoading, setMessages]);
+  }, [messages, currentRoomId, isLoading, setMessages, setUsers, users]);
+  // setUsers와 users 추가
 
   const getMyChatList = useCallback(async (): Promise<void> => {
     try {
@@ -406,7 +339,7 @@ export const useChat = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [setJoinedChatRooms]); // chatService, setIsLoading 제거 (setIsLoading은 상태 설정 함수로 안정적)
+  }, [setJoinedChatRooms]);
 
   const myChatRooms = useMemo((): { roomId: number; keyword: string }[] => {
     return map(joinedChatRooms, chatRoom => {

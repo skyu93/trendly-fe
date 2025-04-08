@@ -5,9 +5,8 @@ import { AxiosError } from 'axios';
 import {
   ChatEventHandlers,
   ChatJoin,
-  ChatJoinResponse,
   ChatLeave,
-  ChatMessage,
+  ChatMessageResponse,
   ChatSendMessage,
   ChatServiceConfig,
   ChatUpdateNickname,
@@ -60,7 +59,7 @@ export class ChatService {
     return this.connection.isConnected();
   }
 
-  public async joinRoom({ roomId, nickname }: ChatJoin): Promise<ChatJoinResponse | null> {
+  public async joinRoom({ roomId, nickname }: ChatJoin): Promise<ChatMessageResponse | null> {
     if (!this.connection.isConnected()) {
       this.connection.connect();
       return null;
@@ -159,22 +158,26 @@ export class ChatService {
   }: {
     roomId: number;
     messageId: number;
-  }): Promise<ChatMessage[] | undefined> {
+  }): Promise<ChatMessageResponse | null> {
     if (isNil(roomId) || isNil(messageId)) {
-      return;
+      return null;
     }
 
     try {
-      const response = await ChatApi.loadPreviousMessages({
+      const { chatMessageDto, nicknameMap } = await ChatApi.loadPreviousMessages({
         roomId,
         messageId,
       });
 
-      return response.chatMessageDto;
+      return {
+        messages: [...chatMessageDto],
+        nicknames: nicknameMap,
+      };
     } catch (error) {
       this.eventHandlers.onError(
         error instanceof Error ? error : new Error('이전 메시지 로드 중 오류가 발생했습니다.'),
       );
+      return null;
     }
   }
 

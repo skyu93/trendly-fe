@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ApiPath } from '@/constants/apiPath';
-import { template } from 'es-toolkit/compat';
+import { replace, startsWith, template } from 'es-toolkit/compat';
 import { StaticImageData } from 'next/image';
 import ProfileImage1 from '@/assets/profile/image-1.webp';
 import ProfileImage2 from '@/assets/profile/image-2.webp';
@@ -23,4 +23,12 @@ const PROFILE_IMAGES: StaticImageData[] = [ProfileImage1, ProfileImage2, Profile
 export const getRandomImage = (): StaticImageData => {
   const randomIndex = Math.floor(Math.random() * PROFILE_IMAGES.length);
   return PROFILE_IMAGES[randomIndex];
+};
+
+export const isBrowser = (): boolean => typeof window !== 'undefined';
+
+export const createWebSocketUrl = (baseUrl: string): string => {
+  return startsWith(baseUrl, 'https://')
+    ? replace(baseUrl, /^https:\/\//i, 'wss://')
+    : replace(baseUrl, /^http:\/\//i, 'ws://');
 };

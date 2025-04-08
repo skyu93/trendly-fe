@@ -34,7 +34,7 @@ export interface ChatJoin {
   nickname?: string;
 }
 
-export interface ChatJoinResponse {
+export interface ChatMessageResponse {
   messages: ChatMessage[];
   nicknames: Record<string, string>;
 }
@@ -75,6 +75,7 @@ export interface EnterRoomResponse {
 
 export interface LoadPreviousMessagesResponse {
   chatMessageDto: ChatMessage[];
+  nicknameMap: Record<string, string>;
 }
 
 export interface UpdateNicknameResponse {

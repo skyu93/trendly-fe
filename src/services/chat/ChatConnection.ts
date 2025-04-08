@@ -3,7 +3,8 @@ import { isEmpty } from 'es-toolkit/compat';
 import { TokenStorage } from '@/services/tokenStorage';
 import { ChatConnectionConfig, ChatConnectionEventHandlers } from './chat.type';
 import { refreshAccessToken } from '@/services/httpClient';
-import { getChatStorageRoomId } from '@/hooks/useChat';
+import { isBrowser } from '@/lib/utils';
+import { CHAT_STORAGE_KEY } from '@/stores/chatStore';
 
 export class ChatConnection {
   private client: Client | null = null;
@@ -24,7 +25,10 @@ export class ChatConnection {
   }
 
   private getCurrentRoomId() {
-    return getChatStorageRoomId();
+    if (!isBrowser()) return null;
+
+    const storedValue = sessionStorage.getItem(CHAT_STORAGE_KEY.CURRENT_ROOM_ID);
+    return storedValue ? Number(storedValue) : null;
   }
 
   public setEventHandlers(handlers: Partial<ChatConnectionEventHandlers>): void {

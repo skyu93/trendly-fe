@@ -5,7 +5,7 @@ import { ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button/Button';
 import { useChat } from '@/hooks/useChat';
 import GlobalHeader from '@/app/GlobalHeader';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/useToast';
 import { isEmpty } from 'es-toolkit/compat';
 import NickNameForm from '@/components/composite/NickNameForm';
 

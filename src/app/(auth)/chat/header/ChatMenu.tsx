@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { ROUTE_PATH } from '@/constants/route';
 import { useErrorHandler } from '@/hooks/useErrorHandler';
 import ExitChatDialog from '@/app/(auth)/chat/header/ExitChatDialog';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/useToast';
 
 interface ChatMenuProps {
   openChangeNickName: (flag: boolean) => void;
