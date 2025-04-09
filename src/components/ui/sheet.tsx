@@ -8,9 +8,7 @@ import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 
 const Sheet = SheetPrimitive.Root;
-
 const SheetTrigger = SheetPrimitive.Trigger;
-
 const SheetClose = SheetPrimitive.Close;
 
 // 커스텀 포털 컴포넌트 (containerSelector를 지원)
@@ -47,7 +45,8 @@ const SheetOverlay = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Ove
   ({ className, containerSelector, ...props }, ref) => {
     // 컨테이너가 있으면 absolute, 없으면 fixed 포지션 사용
     const position = containerSelector ? 'absolute' : 'fixed';
-    const overlayStyles = `${position} inset-0 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0`;
+    // 배경 필터 효과 추가 (반투명 배경 + 블러 효과)
+    const overlayStyles = `${position} inset-0 z-50 bg-black/30 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0`;
 
     return <SheetPrimitive.Overlay className={cn(overlayStyles, className)} {...props} ref={ref} />;
   },
